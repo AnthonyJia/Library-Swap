@@ -8,8 +8,4 @@ packaging==24.2
 psycopg2-binary==2.9.10
 sqlparse==0.5.3
 typing_extensions==4.12.2
-
-echo "django-allauth" >> requirements.txt
-git add requirements.txt
-git commit -m "Added django-allauth"
-git push heroku main
+django-allauth
