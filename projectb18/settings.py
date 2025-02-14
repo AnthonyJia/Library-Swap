@@ -6,18 +6,17 @@ import environ
 env = environ.Env()
 environ.Env.read_env()  # Reads variables from .env file
 
+# Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
-# Build paths inside the project
+# Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: Don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
-ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1', 'project-b-18.herokuapp.com']
-
-# Application definition
+# Installed Apps
 INSTALLED_APPS = [
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,8 +26,13 @@ INSTALLED_APPS = [
 
     # Third-party apps
     'whitenoise.runserver_nostatic',  # For serving static files
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',  # Google OAuth
 ]
 
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
@@ -40,6 +44,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# URLs
 ROOT_URLCONF = 'projectb18.urls'
 
 TEMPLATES = [
@@ -65,6 +75,19 @@ DATABASES = {
     'default': dj_database_url.config(default='sqlite:///' + str(BASE_DIR / "db.sqlite3"))
 }
 
+# Authentication
+SITE_ID = 1
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    }
+}
+
+LOGIN_REDIRECT_URL = '/'  # Redirect users after login
+LOGOUT_REDIRECT_URL = '/'  # Redirect users after logout
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Disable email verification
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -79,25 +102,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static Files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Ensure WhiteNoise manages static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Activate Django-Heroku.
-# Use this code to avoid the psycopg2 / django-heroku error!  
-# Do NOT import django-heroku above!
+# Activate Django-Heroku
 try:
     if 'HEROKU' in os.environ:
         import django_heroku
         django_heroku.settings(locals())
 except ImportError:
-    found = False
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+    pass
