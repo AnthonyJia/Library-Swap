@@ -11,3 +11,8 @@ typing_extensions==4.12.2
 django-allauth
 requests
 PyJWT
+cryptography
+oauthlib
+requests-oauthlib
+django-cors-headers
+whitenoise
