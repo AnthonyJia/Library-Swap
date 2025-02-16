@@ -1,6 +1,7 @@
 asgiref==3.8.1
 dj-database-url==2.3.0
 Django==5.1.6
+django-allauth==65.4.1
 django-environ==0.12.0
 django-heroku==0.3.1
 gunicorn==23.0.0
@@ -8,8 +9,4 @@ packaging==24.2
 psycopg2-binary==2.9.10
 sqlparse==0.5.3
 typing_extensions==4.12.2
-
-echo "django-allauth" >> requirements.txt
-git add requirements.txt
-git commit -m "Added django-allauth"
-git push heroku main
+whitenoise==6.9.0
