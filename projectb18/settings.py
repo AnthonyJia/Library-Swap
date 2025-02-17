@@ -82,16 +82,12 @@ DATABASES = {
 # Authentication Settings for django-allauth
 SITE_ID = 6
 
-SOCIALACCOUNT_AUTO_SIGNUP = True
-
-ACCOUNT_SIGNUP_REDIRECT_URL = "/"
-LOGIN_REDIRECT_URL = "/"
-ACCOUNT_LOGOUT_REDIRECT_URL = "/"
-
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Redirect to homepage after signup
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Change to 'mandatory' in production
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Set to "optional" or "mandatory" for email verification
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically sign up without asking for extra details
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
