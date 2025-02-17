@@ -84,7 +84,7 @@ SITE_ID = 6
 
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Redirect to homepage after signup
 LOGIN_REDIRECT_URL = '/'
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_METHODS = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Change to "optional" or "mandatory" for email verification
@@ -99,8 +99,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
-
-ACCOUNT_LOGIN_METHODS = {'email'}
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
