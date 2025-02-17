@@ -84,7 +84,7 @@ SITE_ID = 6
 
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Redirect to homepage after signup
 LOGIN_REDIRECT_URL = '/'
-ACCOUNT_LOGIN_METHODS = "email"
+ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Change to "optional" or "mandatory" for email verification
