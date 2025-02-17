@@ -83,11 +83,13 @@ DATABASES = {
 SITE_ID = 6
 
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Redirect to homepage after signup
+LOGIN_REDIRECT_URL = '/'
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"  # Set to "optional" or "mandatory" for email verification
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically sign up without asking for extra details
+SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users on the callback URL
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
