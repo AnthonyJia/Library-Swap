@@ -87,9 +87,10 @@ LOGIN_REDIRECT_URL = '/'
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Set to "optional" or "mandatory" for email verification
-SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically sign up without asking for extra details
-SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users on the callback URL
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Change to "optional" or "mandatory" for email verification
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically sign up without extra details
+SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users
+SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True  # Associate the Google account to an existing account by email
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
