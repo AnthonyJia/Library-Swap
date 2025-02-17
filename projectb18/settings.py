@@ -82,7 +82,7 @@ DATABASES = {
 # Authentication Settings for django-allauth
 SITE_ID = 6
 
-SOCIALACCOUNT_ADAPTER = "myapp.adapters.MySocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Redirect to homepage after signup
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGIN_METHODS = {'email'}
