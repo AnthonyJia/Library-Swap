@@ -83,16 +83,18 @@ DATABASES = {
 SITE_ID = 6
 
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
-ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Redirect to homepage after signup
-LOGIN_REDIRECT_URL = '/'
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_EMAIL_REQUIRED = False
-SOCIALACCOUNT_EMAIL_REQUIRED=True
+
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Change to "optional" or "mandatory" for email verification
-SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically sign up without extra details
-SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users
-SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True  # Associate the Google account to an existing account by email
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
