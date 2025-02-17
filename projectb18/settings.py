@@ -82,17 +82,6 @@ DATABASES = {
 # Authentication Settings for django-allauth
 SITE_ID = 6
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': env("GOOGLE_CLIENT_ID"),
-            'secret': env("GOOGLE_CLIENT_SECRET"),
-        },
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-    }
-}
-
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"
