@@ -79,7 +79,7 @@ DATABASES = {
 }
 
 # Authentication Settings for django-allauth
-SITE_ID = 1
+SITE_ID = 3
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
