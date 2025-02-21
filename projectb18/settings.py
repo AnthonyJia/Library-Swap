@@ -12,8 +12,14 @@ SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
 DEBUG = env.bool('DEBUG', default=True)  # Set to False in production
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
+AUTH_USER_MODEL = 'useraccounts.CustomUser'
+
 # Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+ACCOUNT_FORMS = {
+    'signup': 'useraccounts.forms.CustomSignupForm'
+}
 
 # Installed Apps
 INSTALLED_APPS = [
