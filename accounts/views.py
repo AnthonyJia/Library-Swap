@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'accounts/home.html')  # Render the homepage template
 
+def anonymous_view(request):
+    return render(request, 'anonymous.html')
+
 @login_required
 def choose_view(request):
     if request.method == 'POST':
