@@ -28,12 +28,11 @@ INSTALLED_APPS = [
    'django.contrib.messages',
    'django.contrib.staticfiles',
    'django.contrib.sites',
-
-    'accounts.apps.AccountsConfig',
    'allauth',
    'allauth.account',
    'allauth.socialaccount',
    'allauth.socialaccount.providers.google',
+   'accounts.apps.AccountsConfig',
 ]
 
 
@@ -84,6 +83,7 @@ TEMPLATES = [
 # WSGI Application
 WSGI_APPLICATION = 'projectb18.wsgi.application'
 
+LOGIN_REDIRECT_URL = '/choose/'
 
 # Database Configuration (Heroku & Local)
 DATABASES = {
@@ -111,6 +111,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
 # Password validation

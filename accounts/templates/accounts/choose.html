@@ -1,0 +1,8 @@
+{% block content %}
+  <h2>What would you like to do?</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" name="choice" value="provide">Provide Books</button>
+    <button type="submit" name="choice" value="borrow">Borrow Books</button>
+  </form>
+{% endblock %}
