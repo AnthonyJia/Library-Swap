@@ -22,6 +22,8 @@ from projectb18.views import home  # Import the home view
 
 urlpatterns = [
    path('admin/', admin.site.urls),
+   path('', include('accounts.urls')),
+   path('admin/', admin.site.urls),
    path('accounts/', include('allauth.urls')),
    path('', home, name='home'),  # Default homepage
 ]
