@@ -79,11 +79,31 @@ TEMPLATES = [
    },
 ]
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': 'YOUR_CLIENT_ID',
+            'secret': 'YOUR_CLIENT_SECRET',
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+            'prompt': 'select_account'
+        }
+    }
+}
+
 
 # WSGI Application
 WSGI_APPLICATION = 'projectb18.wsgi.application'
 
-LOGIN_REDIRECT_URL = '/choose/'
+LOGIN_REDIRECT_URL = '/post-login/'
+# If you're using allauth specifically, you can also set:
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/post-login/'
 
 # Database Configuration (Heroku & Local)
 DATABASES = {
@@ -92,18 +112,20 @@ DATABASES = {
 
 
 # Authentication Settings for django-allauth
-SITE_ID = 6
+SITE_ID = 7
 
 
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
 
 
-SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = '/post-login/'
+# If you're using allauth specifically, you can also set:
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/post-login/'
 ACCOUNT_SIGNUP_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
