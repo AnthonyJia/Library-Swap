@@ -1,42 +1,42 @@
-# projectb18/adapters.py
-
-
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-
-
-User = get_user_model()
-
+from allauth.socialaccount.models import SocialApp
+from django.conf import settings
 
 class MySocialAccountAdapter(DefaultSocialAccountAdapter):
-   def pre_social_login(self, request, sociallogin):
-       """
-       Force AllAuth to auto-link the Google login to an existing user if
-       the email already exists in the database, skipping any conflict form.
-       """
-       # If the user is already logged in, do nothing
-       if request.user.is_authenticated:
-           return
+    def pre_social_login(self, request, sociallogin):
+        # Existing code (auto-link user by email)
+        if request.user.is_authenticated:
+            return '/post-login/'
 
+        email = sociallogin.user.email
+        if email:
+            try:
+                existing_user = get_user_model().objects.get(email=email)
+                sociallogin.connect(request, existing_user)
+            except get_user_model().DoesNotExist:
+                pass
 
-       # If Google provides an email
-       email = sociallogin.user.email
-       if email:
-           try:
-               # Look for a user with the same email
-               existing_user = User.objects.get(email=email)
-               # Link this social login to that existing user
-               sociallogin.connect(request, existing_user)
-           except User.DoesNotExist:
-               # No existing user → AllAuth can auto-create one
-               pass
+    def get_app(self, request, provider=None, client_id=None):
+        # Existing code (force single SocialApp)
+        qs = SocialApp.objects.filter(provider=provider, sites=settings.SITE_ID)
+        try:
+            return qs.get()
+        except SocialApp.MultipleObjectsReturned:
+            return qs.first()
+        except SocialApp.DoesNotExist:
+            return None
 
+    def is_auto_signup_allowed(self, request, sociallogin):
+        return True
 
-   def is_auto_signup_allowed(self, request, sociallogin):
-       # Always skip the sign-up form
-       return True
+    def requires_additional_signup(self, request, sociallogin):
+        return False
 
-
-   def requires_additional_signup(self, request, sociallogin):
-       # Never show the final sign-up form
-       return False
+    def get_login_redirect_url(self, request):
+        """
+        Override this method to force the post-login URL.
+        You can hardcode '/post-login/' or reverse a named URL.
+        """
+        return '/post-login/'
