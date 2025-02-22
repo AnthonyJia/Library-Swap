@@ -1,2 +1,9 @@
 venv/
 .env
+<<<<<<< HEAD
+*.pyc
+db.sqlite3
+=======
+__pycache__/
+*.py[cod]
+>>>>>>> b2d82676e7b7a1f059038a476aa45985d0756977
