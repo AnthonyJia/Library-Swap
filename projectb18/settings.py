@@ -126,8 +126,8 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 LOGIN_REDIRECT_URL = '/post-login/'
 # If you're using allauth specifically, you can also set:
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/post-login/'
-ACCOUNT_SIGNUP_REDIRECT_URL = "/"
-ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = '/post-login/'
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/post-login/'
 
 
 ACCOUNT_USERNAME_REQUIRED = False
