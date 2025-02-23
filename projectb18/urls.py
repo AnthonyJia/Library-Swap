@@ -19,10 +19,12 @@ from django.contrib import admin
 from django.urls import path, include
 from projectb18.views import home  # Import the home view
 from .views import choose_view
+from allauth.account.views import LoginView
 
 
 urlpatterns = [
    path('admin/', admin.site.urls),
+   path('accounts/login/', LoginView.as_view(template_name='accounts/login.html'), name='account_login'),
    path('', include('accounts.urls')),
    path('accounts/', include('allauth.urls')),
    path('choose/', choose_view, name='choose'),

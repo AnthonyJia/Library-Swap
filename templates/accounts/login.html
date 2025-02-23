@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% load socialaccount %}
-
-{% block content %}
-    <a href="{% provider_login_url 'google' %}" class="btn btn-primary">
-        <img src="https://developers.google.com/identity/images/g-logo.png" width="20px">
-        Sign in with Google
-    </a>
-{% endblock %}
