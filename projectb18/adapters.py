@@ -8,7 +8,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
         # Existing code (auto-link user by email)
         if request.user.is_authenticated:
-            return '/post-login/'
+            return '/choose/'
 
         email = sociallogin.user.email
         if email:

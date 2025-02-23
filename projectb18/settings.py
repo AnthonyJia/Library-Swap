@@ -101,9 +101,9 @@ SOCIALACCOUNT_PROVIDERS = {
 # WSGI Application
 WSGI_APPLICATION = 'projectb18.wsgi.application'
 
-LOGIN_REDIRECT_URL = '/post-login/'
+LOGIN_REDIRECT_URL = '/choose/'
 # If you're using allauth specifically, you can also set:
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/post-login/'
+SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
 
 # Database Configuration (Heroku & Local)
 DATABASES = {
