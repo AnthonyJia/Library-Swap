@@ -112,7 +112,7 @@ DATABASES = {
 
 
 # Authentication Settings for django-allauth
-SITE_ID = 7
+SITE_ID = 8
 
 
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
