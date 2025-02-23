@@ -18,12 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from projectb18.views import home  # Import the home view
-from .views import post_login_redirect_view
+from .views import choose_view
 
 
 urlpatterns = [
    path('admin/', admin.site.urls),
    path('', include('accounts.urls')),
    path('accounts/', include('allauth.urls')),
-   path('post-login/', post_login_redirect_view, name='post_login_redirect'),
+   path('choose/', choose_view, name='choose'),
 ]

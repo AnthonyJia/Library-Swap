@@ -8,7 +8,7 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
         # Existing code (auto-link user by email)
         if request.user.is_authenticated:
-            return '/post-login/'
+            return '/choose/'
 
         email = sociallogin.user.email
         if email:
@@ -39,4 +39,4 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         Override this method to force the post-login URL.
         You can hardcode '/post-login/' or reverse a named URL.
         """
-        return '/post-login/'
+        return '/choose/'
