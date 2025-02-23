@@ -5,4 +5,13 @@
     <button type="submit" name="choice" value="provider">Provide Books</button>
     <button type="submit" name="choice" value="borrower">Borrow Books</button>
   </form>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      {% if "error" in message.tags %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
 {% endblock %}
