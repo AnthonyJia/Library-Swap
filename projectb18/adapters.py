@@ -39,4 +39,4 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         Override this method to force the post-login URL.
         You can hardcode '/post-login/' or reverse a named URL.
         """
-        return '/post-login/'
+        return '/choose/'
