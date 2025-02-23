@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content%}
+    <a href="{% url 'anonymous' %}">Continue as Anonymous user</a><br>
+    <a href="{% url 'account_login' %}">Login</a><br>
+    <a href="{% url 'account_login' %}">Sign Up</a><br>
+{% endblock %}
