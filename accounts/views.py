@@ -7,7 +7,7 @@ def home(request):
     return render(request, 'accounts/home.html')  # Render the homepage template
 
 def anonymous_view(request):
-    return render(request, 'anonymous.html')
+    return render(request, 'accounts/anonymous.html')
 
 @login_required
 def choose_view(request):
@@ -19,14 +19,14 @@ def choose_view(request):
             return redirect('provide_page')
         elif choice == 'borrower':
             return redirect('borrow_page')
-    return render(request, 'choose.html')
+    return render(request, 'accounts/choose.html')
 
 @login_required
 def provide_view(request):
     # Render a page for providers
-    return render(request, 'provide.html')
+    return render(request, 'accounts/provide.html')
 
 @login_required
 def borrow_view(request):
     # Render a page for borrowers
-    return render(request, 'borrow.html')
+    return render(request, 'accounts/borrow.html')
