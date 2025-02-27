@@ -6,6 +6,13 @@
     <button type="submit" name="choice" value="provider">Provide Books</button>
     <button type="submit" name="choice" value="borrower">Borrow Books</button>
   </form>
+<<<<<<< HEAD
+=======
+  <form action="{% url 'account_logout' %}" method="POST">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+  </form>
+>>>>>>> 74a6636d3380b0093b72f414ff7ce1ab37750dd6
   {% if messages %}
   <ul class="messages">
     {% for message in messages %}
