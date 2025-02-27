@@ -82,9 +82,9 @@ TEMPLATES = [
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': 'YOUR_CLIENT_ID',
-            'secret': 'YOUR_CLIENT_SECRET',
-            'key': ''
+            'client_id': env("GOOGLE_CLIENT_ID", default=''),
+            'secret': env("GOOGLE_CLIENT_SECRET", default=''),
+            'key': '',
         },
         'SCOPE': [
             'profile',
@@ -104,6 +104,8 @@ WSGI_APPLICATION = 'projectb18.wsgi.application'
 LOGIN_REDIRECT_URL = '/choose/'
 # If you're using allauth specifically, you can also set:
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
+
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # Database Configuration (Heroku & Local)
 DATABASES = {
