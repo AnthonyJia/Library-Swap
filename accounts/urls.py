@@ -1,10 +1,7 @@
 from django.urls import path, include
 from .views import home  # Import the home view
 from django.contrib.auth import views as auth_views
-<<<<<<< HEAD
-=======
 from django.contrib.auth.views import LogoutView
->>>>>>> 74a6636d3380b0093b72f414ff7ce1ab37750dd6
 from .views import choose_view, provide_view, borrow_view, anonymous_view
 
 urlpatterns = [
@@ -14,8 +11,5 @@ urlpatterns = [
     path('choose/', choose_view, name='choose'),
     path('provide/', provide_view, name='provide_page'),
     path('borrow/', borrow_view, name='borrow_page'),
-<<<<<<< HEAD
-=======
     path('logout/', LogoutView.as_view(), name='account_logout')
->>>>>>> 74a6636d3380b0093b72f414ff7ce1ab37750dd6
 ]
