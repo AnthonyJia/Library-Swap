@@ -82,15 +82,9 @@ TEMPLATES = [
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-<<<<<<< HEAD
-            'client_id': 'YOUR_CLIENT_ID',
-            'secret': 'YOUR_CLIENT_SECRET',
-            'key': ''
-=======
             'client_id': env("GOOGLE_CLIENT_ID", default=''),
             'secret': env("GOOGLE_CLIENT_SECRET", default=''),
             'key': '',
->>>>>>> 74a6636d3380b0093b72f414ff7ce1ab37750dd6
         },
         'SCOPE': [
             'profile',
@@ -111,11 +105,8 @@ LOGIN_REDIRECT_URL = '/choose/'
 # If you're using allauth specifically, you can also set:
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
 
-<<<<<<< HEAD
-=======
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
->>>>>>> 74a6636d3380b0093b72f414ff7ce1ab37750dd6
 # Database Configuration (Heroku & Local)
 DATABASES = {
    'default': dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
