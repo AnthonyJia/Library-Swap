@@ -3,21 +3,17 @@ import dj_database_url
 from pathlib import Path
 import environ
 
-
 # Load environment variables
 env = environ.Env()
 environ.Env.read_env()  # Reads variables from .env file
-
 
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
 DEBUG = env.bool('DEBUG', default=True)  # Set to False in production
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
-
 # Paths
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -29,12 +25,12 @@ INSTALLED_APPS = [
    'django.contrib.staticfiles',
    'django.contrib.sites',
    'allauth',
+   'storages',  # Required for AWS S3
    'allauth.account',
    'allauth.socialaccount',
    'allauth.socialaccount.providers.google',
    'accounts.apps.AccountsConfig',
 ]
-
 
 # Middleware
 MIDDLEWARE = [
@@ -50,23 +46,20 @@ MIDDLEWARE = [
    'allauth.account.middleware.AccountMiddleware',
 ]
 
-
 # Authentication Backends
 AUTHENTICATION_BACKENDS = [
    'django.contrib.auth.backends.ModelBackend',
    'allauth.account.auth_backends.AuthenticationBackend',  # Needed for django-allauth
 ]
 
-
 # URLs
 ROOT_URLCONF = 'projectb18.urls'
-
 
 # Templates Configuration
 TEMPLATES = [
    {
        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-       'DIRS': [BASE_DIR / "templates"], 
+       'DIRS': [BASE_DIR / "templates"],
        'APP_DIRS': True,
        'OPTIONS': {
            'context_processors': [
@@ -97,14 +90,11 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
 # WSGI Application
 WSGI_APPLICATION = 'projectb18.wsgi.application'
 
 LOGIN_REDIRECT_URL = '/choose/'
-# If you're using allauth specifically, you can also set:
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
-
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # Database Configuration (Heroku & Local)
@@ -112,32 +102,21 @@ DATABASES = {
    'default': dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 
-
 # Authentication Settings for django-allauth
 SITE_ID = 8
-
-
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
-
-
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
-
-LOGIN_REDIRECT_URL = '/choose/'
-# If you're using allauth specifically, you can also set:
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
 LOGIN_REDIRECT_URL = '/choose/'
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
-
 
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -147,19 +126,28 @@ AUTH_PASSWORD_VALIDATORS = [
    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/New_York'
 USE_I18N = True
 USE_TZ = True
 
-
 # Static Files Configuration
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# AWS S3 Configuration for Media Files
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default='')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY', default='')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='projectb18')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
 # Heroku Deployment Compatibility
 try:
