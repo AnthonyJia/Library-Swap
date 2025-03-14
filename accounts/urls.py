@@ -10,5 +10,5 @@ urlpatterns = [
     path('choose/', choose_view, name='choose'),
     path('provide/', provide_view, name='provide_page'),
     path('borrow/', borrow_view, name='borrow_page'),
-    path('logout/', auth_views.LogoutView.as_view(), name='account_logout')
+    path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout')
 ]

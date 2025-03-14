@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'projectb18.wsgi.application'
 
 LOGIN_REDIRECT_URL = '/choose/'
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+# ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # Database Configuration (Heroku & Local)
 DATABASES = {
