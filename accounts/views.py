@@ -1,11 +1,11 @@
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from .forms import UserImageForm
+
 def home(request):
-    return render(request, 'accounts/home.html')  # Render the homepage template
+    return render(request, 'accounts/home.html')
 
 def anonymous_view(request):
     return render(request, 'accounts/anonymous.html')
@@ -22,9 +22,8 @@ def choose_view(request):
                 request.user.save()
                 return redirect('provide_page')
             else:
-                # Not approved
                 messages.error(request, "You do not have permission to be a provider yet.")
-                return redirect('choose')  # reload the same page or show a different message page
+                return redirect('choose')
         elif choice == 'borrower':
             # They want to be a borrower
             request.user.role = 'borrower'
@@ -35,10 +34,33 @@ def choose_view(request):
 
 @login_required
 def provide_view(request):
-    # Render a page for providers
     return render(request, 'accounts/provide.html')
 
 @login_required
 def borrow_view(request):
-    # Render a page for borrowers
     return render(request, 'accounts/borrow.html')
+
+@login_required
+def profile_view(request):
+    """
+    Displays the user’s current profile (including profile picture).
+    """
+    return render(request, 'accounts/profile.html')
+
+@login_required
+def upload_picture_view(request):
+    """
+    Displays and processes the form for uploading/updating the profile picture.
+    """
+    if request.method == 'POST':
+        form = UserImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile picture updated successfully!")
+            return redirect('profile')  # Redirect back to profile page
+        else:
+            messages.error(request, "Error uploading your profile picture.")
+    else:
+        form = UserImageForm(instance=request.user)
+
+    return render(request, 'accounts/upload_picture.html', {'form': form})

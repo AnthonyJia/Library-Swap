@@ -6,13 +6,19 @@
     <button type="submit" name="choice" value="provider">Provide Books</button>
     <button type="submit" name="choice" value="borrower">Borrow Books</button>
   </form>
+
+  <!-- New button to go to the Profile page -->
+  <form method="GET" action="{% url 'profile' %}">
+    <button type="submit">View Profile</button>
+  </form>
+
   {% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      {% if "error" in message.tags %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-{% endif %}
+    <ul class="messages">
+      {% for message in messages %}
+        {% if "error" in message.tags %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}
