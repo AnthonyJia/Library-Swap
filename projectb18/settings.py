@@ -102,7 +102,7 @@ DATABASES = {
 }
 
 # django-allauth settings
-SITE_ID = 8
+SITE_ID = 10
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True
