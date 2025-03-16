@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Your Profile</h2>
+  <p>Email: {{ user.email }}</p>
+
+  {% if user.image %}
+    <p>Current Profile Picture:</p>
+    <img src="{{ user.image.url }}" alt="Profile Picture" style="max-width:200px;">
+  {% else %}
+    <p>No profile picture uploaded yet.</p>
+  {% endif %}
+
+  <p>
+    <a href="{% url 'upload_picture' %}">Upload/Update Profile Picture</a>
+  </p>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
