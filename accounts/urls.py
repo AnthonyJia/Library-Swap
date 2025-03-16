@@ -13,6 +13,7 @@ from .views import (
 
 urlpatterns = [
     path('', home, name='home'),
+    path('books/', include('books.urls')),
     path('anonymous/', anonymous_view, name='anonymous'),
     path('accounts/', include('allauth.urls')),
     path('choose/', choose_view, name='choose'),

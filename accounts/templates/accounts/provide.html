@@ -8,21 +8,9 @@
       </div>
       <div class="card-body">
          <p class="text-center">Use this page to add new books to Library Swap. Fill in the details below and click Submit.</p>
-         <!-- Example form for adding a book -->
          <form method="post" enctype="multipart/form-data">
            {% csrf_token %}
-           <div class="mb-3">
-             <label for="title" class="form-label">Book Title</label>
-             <input type="text" class="form-control" id="title" name="title" placeholder="Enter book title">
-           </div>
-           <div class="mb-3">
-             <label for="description" class="form-label">Description</label>
-             <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter book description"></textarea>
-           </div>
-           <div class="mb-3">
-             <label for="image" class="form-label">Book Cover</label>
-             <input type="file" class="form-control" id="image" name="image">
-           </div>
+           {{ form.as_p }}
            <button type="submit" class="btn btn-primary">Submit Book</button>
          </form>
       </div>

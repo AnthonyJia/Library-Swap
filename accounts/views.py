@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import UserImageForm
+from books.forms import BookForm
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -34,7 +35,19 @@ def choose_view(request):
 
 @login_required
 def provide_view(request):
-    return render(request, 'accounts/provide.html')
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.user = request.user  # Associate the book with the logged-in user
+            book.save()
+            messages.success(request, "Book submitted successfully!")
+            return redirect('provide_page')  # Ensure this URL name matches your URL config
+        else:
+            messages.error(request, "There was an error submitting your book.")
+    else:
+        form = BookForm()
+    return render(request, 'accounts/provide.html', {'form': form})
 
 @login_required
 def borrow_view(request):

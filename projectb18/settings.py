@@ -4,7 +4,7 @@ from pathlib import Path
 import environ
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG)
 
 # Define BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
 ]
 
@@ -166,17 +167,9 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# ------------------------------
-# End of S3/Static/Media Settings
-# ------------------------------
-
-# Heroku Deployment Compatibility (if needed)
-# (Commented out if not using Heroku)
-"""
 try:
     if 'HEROKU' in os.environ:
         import django_heroku
         django_heroku.settings(locals())
 except ImportError:
     pass
-"""
