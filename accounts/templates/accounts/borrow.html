@@ -5,4 +5,17 @@
   <div style="text-align: right; font-size: small; margin-bottom: 10px;">
     Logged in as: {{ request.user.email }}
   </div>
+
+  <div class="book-list">
+    {% for book in books %}
+      <div class="book-item" style="margin-bottom:20px;">
+        {% if book.image %}
+          <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width:200px;">
+        {% endif %}
+        <h3>{{ book.title }}</h3>
+        <p>{{ book.description }}</p>
+        <p>Uploaded by: {{ book.user.email }}</p>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

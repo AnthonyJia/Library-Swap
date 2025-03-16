@@ -1,0 +1,7 @@
+from django.urls import path
+from .views import provide_book_view, borrow_books_view
+
+urlpatterns = [
+    path('provide/', provide_book_view, name='provide_page'),
+    path('borrow/', borrow_books_view, name='borrow_page'),
+]

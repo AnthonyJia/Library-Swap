@@ -2,89 +2,88 @@ import os
 import dj_database_url
 from pathlib import Path
 import environ
+import logging
 
+#logging.basicConfig(level=logging.DEBUG)
 
-# Load environment variables
-env = environ.Env()
-environ.Env.read_env()  # Reads variables from .env file
+# Define BASE_DIR
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialize django-environ and load .env from BASE_DIR
+env = environ.Env(DEBUG=(bool, True))
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
-DEBUG = env.bool('DEBUG', default=True)  # Set to False in production
+DEBUG = env.bool('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
-
-
-# Paths
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Installed Apps
 INSTALLED_APPS = [
-   'django.contrib.admin',
-   'django.contrib.auth',
-   'django.contrib.contenttypes',
-   'django.contrib.sessions',
-   'django.contrib.messages',
-   'django.contrib.staticfiles',
-   'django.contrib.sites',
-   'allauth',
-   'allauth.account',
-   'allauth.socialaccount',
-   'allauth.socialaccount.providers.google',
-   'accounts.apps.AccountsConfig',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'storages',  # Required for AWS S3
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'books.apps.BooksConfig',
+    'accounts.apps.AccountsConfig',
 ]
-
 
 # Middleware
 MIDDLEWARE = [
-   'django.middleware.security.SecurityMiddleware',
-   'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
-   'django.contrib.sessions.middleware.SessionMiddleware',
-   'django.middleware.common.CommonMiddleware',
-   'django.middleware.csrf.CsrfViewMiddleware',
-   'django.contrib.auth.middleware.AuthenticationMiddleware',
-   'allauth.account.middleware.AccountMiddleware',
-   'django.contrib.messages.middleware.MessageMiddleware',
-   'django.middleware.clickjacking.XFrameOptionsMiddleware',
-   'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
-
 
 # Authentication Backends
 AUTHENTICATION_BACKENDS = [
-   'django.contrib.auth.backends.ModelBackend',
-   'allauth.account.auth_backends.AuthenticationBackend',  # Needed for django-allauth
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-
-# URLs
+# URLs and WSGI
 ROOT_URLCONF = 'projectb18.urls'
-
+WSGI_APPLICATION = 'projectb18.wsgi.application'
 
 # Templates Configuration
 TEMPLATES = [
-   {
-       'BACKEND': 'django.template.backends.django.DjangoTemplates',
-       'DIRS': [BASE_DIR / "templates"], 
-       'APP_DIRS': True,
-       'OPTIONS': {
-           'context_processors': [
-               'django.template.context_processors.debug',
-               'django.template.context_processors.request',
-               'django.contrib.auth.context_processors.auth',
-               'django.contrib.messages.context_processors.messages',
-           ],
-       },
-   },
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / "templates"],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
+# Social Account Providers
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': 'YOUR_CLIENT_ID',
-            'secret': 'YOUR_CLIENT_SECRET',
-            'key': ''
+            'client_id': env("GOOGLE_CLIENT_ID", default=''),
+            'secret': env("GOOGLE_CLIENT_SECRET", default=''),
+            'key': '',
         },
         'SCOPE': [
             'profile',
@@ -97,38 +96,21 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
-# WSGI Application
-WSGI_APPLICATION = 'projectb18.wsgi.application'
-
-LOGIN_REDIRECT_URL = '/choose/'
-# If you're using allauth specifically, you can also set:
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
-
 # Database Configuration (Heroku & Local)
 DATABASES = {
-   'default': dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+    'default': dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 
-
-# Authentication Settings for django-allauth
+# django-allauth settings
 SITE_ID = 8
-
-
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
-
-
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
-
 LOGIN_REDIRECT_URL = '/choose/'
-# If you're using allauth specifically, you can also set:
+LOGIN_URL = 'account_login'
 SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
-LOGIN_REDIRECT_URL = '/choose/'
-SOCIALACCOUNT_LOGIN_REDIRECT_URL = '/choose/'
-
 
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
@@ -136,15 +118,13 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-   {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-   {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-   {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-   {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
-
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -152,17 +132,44 @@ TIME_ZONE = 'America/New_York'
 USE_I18N = True
 USE_TZ = True
 
+# ------------------------------
+# Static and Media Files Settings
+# ------------------------------
 
-# Static Files Configuration
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Define S3 storages for both static and media files
+STORAGES = {
+    # Media (user-uploaded) files:
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    # Static files (CSS, JS, etc):
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+}
 
+# AWS S3 Settings
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='projectb18')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+AWS_S3_SIGNATURE_NAME = 's3v4'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False  # Disable query string auth for public static files
 
-# Heroku Deployment Compatibility
+# Static and Media Files URLs and Storage
+STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 try:
-   if 'HEROKU' in os.environ:
-       import django_heroku
-       django_heroku.settings(locals())
+    if 'HEROKU' in os.environ:
+        import django_heroku
+        django_heroku.settings(locals())
 except ImportError:
-   pass
+    pass
