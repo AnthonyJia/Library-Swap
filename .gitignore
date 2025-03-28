@@ -1,11 +1,8 @@
 venv/
-<<<<<<< HEAD
-=======
-env/
->>>>>>> 74a6636d3380b0093b72f414ff7ce1ab37750dd6
 .env
 *.pyc
 db.sqlite3
 __pycache__/
 *.pyc
 *.pyo
+*.DS_Store

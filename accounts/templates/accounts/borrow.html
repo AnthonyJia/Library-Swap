@@ -6,6 +6,15 @@
     Logged in as: {{ request.user.email }}
   </div>
 
+  <!-- Search form -->
+  <form method="get" action="">
+      <div class="input-group mb-3">
+         <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by title, author, or genre">
+         <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </div>
+  </form>
+
+  <!-- List of books -->
   <div class="book-list">
     {% for book in books %}
       <div class="book-item" style="margin-bottom:20px;">
@@ -13,9 +22,13 @@
           <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width:200px;">
         {% endif %}
         <h3>{{ book.title }}</h3>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Genre:</strong> {{ book.genre }}</p>
         <p>{{ book.description }}</p>
         <p>Uploaded by: {{ book.user.email }}</p>
       </div>
+    {% empty %}
+      <p>No books found.</p>
     {% endfor %}
   </div>
 {% endblock %}
