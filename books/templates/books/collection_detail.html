@@ -2,7 +2,10 @@
 {% block content %}
   <h2>{{ collection.title }}</h2>
   <p>Visibility: {{ collection.visibility }}</p>
-
+  {% if collection.creator == request.user %}
+  <a href="{% url 'edit_collection' collection.pk %}" class="btn btn-warning">Edit Collection</a>
+  <a href="{% url 'delete_collection' collection.pk %}" class="btn btn-danger">Delete Collection</a>
+  {% endif %}
   <h3>Books in This Collection</h3>
   <ul>
     {% for book in books %}

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import provide_book_view, borrow_books_view, create_collection_view, list_collection_view, collection_detail_view
+from .views import provide_book_view, borrow_books_view, create_collection_view, list_collection_view, collection_detail_view, edit_collection_view, delete_collection_view
 
 urlpatterns = [
     path('provide/', provide_book_view, name='provide_page'),
@@ -7,4 +7,6 @@ urlpatterns = [
     path('collection/create/', create_collection_view, name='create_collection_page'),
     path('collection/list/', list_collection_view, name='list_collection_page'),
     path('collection/<int:pk>/', collection_detail_view, name='collection_detail'),
+    path('collection/<int:pk>/edit/', edit_collection_view, name='edit_collection'),
+    path('collection/<int:pk>/delete/', delete_collection_view, name='delete_collection'),
 ]
