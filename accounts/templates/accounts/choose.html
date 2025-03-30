@@ -10,11 +10,11 @@
 
   <!-- Button to create a collection -->
   <div class="d-flex gap-2 mt-3">
-    <form method="GET" action="{% url 'list_collection_page' %}">
-      <button type="submit" class="btn btn-primary"> Browse Collections</button>
-    </form>
     <form method="GET" action="{% url 'create_collection_page' %}">
       <button type="submit" class="btn btn-success">Create Collection</button>
+    </form>
+    <form method="GET" action="{% url 'list_collection_page' %}">
+      <button type="submit" class="btn btn-primary"> Browse Collections</button>
     </form>
   </div>
   
