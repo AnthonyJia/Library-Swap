@@ -47,21 +47,32 @@ def create_collection_view(request):
         if form.is_valid():
             collection = form.save(commit=False)
             collection.creator = request.user  # set the creator
-            collection.save()  # Save early to get an ID, required for many-to-many access
+            collection.save()  # Save early to get an ID
+            form.save_m2m()  # Save many-to-many relationships
 
-            form.save_m2m()  # Save m2m relations now so we can access collection.books.all()
+            # Automatically grant the creator access to private collections.
+            if collection.visibility == 'private':
+                collection.allowed_users.add(request.user)
 
-             # Now do the validation
+            # Validation: Check that at least one book is added
             if not collection.books.exists():
                 messages.error(request, "A collection must contain at least one book.")
                 collection.delete() 
                 return redirect('create_collection_page')
             
+            # Validation: Only provider-approved users can create private collections.
+            if collection.visibility == 'private' and not request.user.is_provider_approved:
+                messages.error(request, "You must be provider approved to create a private collection.")
+                collection.delete()
+                return redirect('create_collection_page')
+            
+            # Validation: If the user is a borrower, they cannot create private collections.
             if request.user.role == 'borrower' and collection.visibility == 'private':
                 messages.error(request, "Patrons cannot create private collections.")
                 collection.delete()
                 return redirect('create_collection_page')
 
+            # Validate each book's collection constraints
             for book in collection.books.all():
                 other_collections = book.collection_set.exclude(id=collection.id)
                 if collection.visibility == 'private':
