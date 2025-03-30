@@ -77,3 +77,8 @@ def upload_picture_view(request):
         form = UserImageForm(instance=request.user)
 
     return render(request, 'accounts/upload_picture.html', {'form': form})
+
+from django.shortcuts import render
+
+def lending_policies_view(request):
+    return render(request, 'accounts/lending_policies.html')
