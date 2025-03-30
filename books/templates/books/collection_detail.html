@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ collection.title }}</h2>
+  <p>Visibility: {{ collection.visibility }}</p>
+
+  <h3>Books in This Collection</h3>
+  <ul>
+    {% for book in books %}
+      <li>{{ book.title }}</li>
+    {% empty %}
+      <li>No books in this collection.</li>
+    {% endfor %}
+  </ul>
+
+  <p><a href="{% url 'list_collection_page' %}">Back to Collections</a></p>
+{% endblock %}

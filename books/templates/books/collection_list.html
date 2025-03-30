@@ -4,7 +4,9 @@
   <ul class="list-group">
     {% for collection in collections %}
       <li class="list-group-item">
-        <strong>{{ collection.title }}</strong> — {{ collection.visibility }}
+        <a href="{% url 'collection_detail' collection.pk %}">
+          <strong>{{ collection.title }}</strong> — {{ collection.visibility }}
+        </a>
       </li>
     {% empty %}
       <li class="list-group-item">No collections found.</li>

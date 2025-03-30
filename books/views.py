@@ -5,6 +5,7 @@ from django.db.models import Q
 from .forms import BookForm, CollectionForm
 from .models import Book, Collection
 import logging
+from django.shortcuts import render, redirect, get_object_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -81,3 +82,12 @@ def list_collection_view(request):
     collections = Collection.objects.all()  # Query all collections
     return render(request, 'books/collection_list.html', {'collections': collections})
 
+@login_required
+def collection_detail_view(request, pk):
+    collection = get_object_or_404(Collection, pk=pk)
+    books_in_collection = Book.objects.filter(collection=collection)
+
+    return render(request, 'books/collection_detail.html', {
+        'collection': collection,
+        'books': books_in_collection,
+    })
