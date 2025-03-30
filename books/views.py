@@ -87,7 +87,24 @@ def collection_detail_view(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
     books_in_collection = Book.objects.filter(collection=collection)
 
-    return render(request, 'books/collection_detail.html', {
-        'collection': collection,
-        'books': books_in_collection,
-    })
+    if collection.visibility == 'public':
+        return render(request, 'books/collection_detail.html', {
+            'collection': collection,
+            'books': books_in_collection,
+        })
+    
+    # If it's private, only allow users in the allowed_users set.
+    elif collection.visibility == 'private':
+        if request.user in collection.allowed_users.all():
+            return render(request, 'books/collection_detail.html', {
+                'collection': collection,
+                'books': books_in_collection,
+            })
+        else:
+            messages.error(request, "You do not have access to this private collection.")
+            return redirect('list_collection_page')
+    else:
+        return render(request, 'books/collection_detail.html', {
+            'collection': collection,
+            'books': books_in_collection,
+        })
