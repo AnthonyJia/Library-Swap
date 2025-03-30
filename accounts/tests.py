@@ -98,13 +98,13 @@ class TestAccountsUrls(TestCase):
     def test_provide_url_resolves(self):
         # Tests that the URL named 'provide_page' resolves to the provide_view function
         url = reverse('provide_page')
-        from accounts.views import provide_book_view
+        from accounts.views import provide_view
         self.assertEqual(resolve(url).func, provide_view)
 
     def test_borrow_url_resolves(self):
         # Tests that the URL named 'borrow_page' resolves to the borrow_view function
         url = reverse('borrow_page')
-        from accounts.views import borrow_books_view
+        from accounts.views import borrow_view
         self.assertEqual(resolve(url).func, borrow_view)
 
 
