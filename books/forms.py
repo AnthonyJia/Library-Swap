@@ -4,7 +4,6 @@ from .models import Book, Collection
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        # Include all desired fields
         fields = ['title', 'author', 'genre', 'description', 'image']
         labels = {
             'description': 'Description (Optional)',
@@ -34,24 +33,11 @@ class BookForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make these fields required
         self.fields['title'].required = True
         self.fields['author'].required = True
         self.fields['genre'].required = True
         self.fields['image'].required = True
-        # Description remains optional
         self.fields['description'].required = False
-class CollectionForm(forms.ModelForm):
-     class Meta:
-        model = Collection
-        fields = ['title', 'description', 'books', 'visibility', 'allowed_users']
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'books': forms.SelectMultiple(attrs={'class': 'form-control select2'}),
-            'visibility': forms.Select(attrs={'class': 'form-control'}),
-            'allowed_users': forms.SelectMultiple(attrs={'class': 'form-control select2'}),
-        }
 
 class CollectionForm(forms.ModelForm):
     class Meta:
@@ -65,9 +51,20 @@ class CollectionForm(forms.ModelForm):
             'books': 'Books in Collection',
         }
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter collection title'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter description (optional)', 'rows': 3}),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter collection title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter description (optional)',
+                'rows': 3
+            }),
             'visibility': forms.Select(attrs={'class': 'form-control'}),
-            'allowed_users': forms.SelectMultiple(attrs={'class': 'form-control'}),
-            'books': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'allowed_users': forms.SelectMultiple(attrs={
+                'class': 'form-control select2'
+            }),
+            'books': forms.SelectMultiple(attrs={
+                'class': 'form-control select2'
+            }),
         }
