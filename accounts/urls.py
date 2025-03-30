@@ -8,6 +8,7 @@ from .views import (
     provide_view,
     borrow_view,
     profile_view,
+    lending_policies_view,
     upload_picture_view
 )
 
