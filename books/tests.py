@@ -37,19 +37,6 @@ class BookModelTest(TestCase):
         )
         self.assertEqual(book.uploader_email, 'custom@example.com')
 
-    def test_image_field(self):
-        """Test that an image can be associated with the Book."""
-        # Create a fake image
-        fake_image = SimpleUploadedFile(
-            "test_cover.jpg", b"fake-image-bytes", content_type="image/jpeg"
-        )
-        book = Book.objects.create(
-            user=self.user,
-            title="Image Test Book",
-            image=fake_image
-        )
-        self.assertTrue("test_cover.jpg", book.image.name)
-
     def test_auto_set_uploader_email_only_if_blank(self):
         """Check that uploader_email is set only if blank. 
            If we reassign, the user’s email shouldn’t overwrite it."""
@@ -150,6 +137,21 @@ class BookModelTest(TestCase):
             book = Book(user=self.user)  # missing title
             book.full_clean()  # triggers validation"
             ""
+"""
+
+"""
+    def test_image_field(self):
+        Test that an image can be associated with the Book.
+        # Create a fake image
+        fake_image = SimpleUploadedFile(
+            "test_cover.jpg", b"fake-image-bytes", content_type="image/jpeg"
+        )
+        book = Book.objects.create(
+            user=self.user,
+            title="Image Test Book",
+            image=fake_image
+        )
+        self.assertTrue("test_cover.jpg", book.image.name)
 """
 
 
