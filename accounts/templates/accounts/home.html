@@ -1,6 +1,13 @@
 {% extends "base.html" %}
-{% block content%}
-    <a href="{% url 'anonymous' %}">Continue as Anonymous user</a><br>
-    <a href="{% url 'account_login' %}">Login</a><br>
-    <a href="{% url 'account_login' %}">Sign Up</a><br>
+{% block content %}
+<div class="text-center my-5">
+  <h1 class="mb-4">Welcome to Library Swap</h1>
+  <p class="lead mb-4">
+    Share and borrow books from your local community.
+  </p>
+  <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+    <a href="{% url 'anonymous' %}" class="btn btn-outline-secondary btn-lg px-4">Continue Anonymously</a>
+    <a href="{% url 'account_login' %}" class="btn btn-primary btn-lg px-4">Login / Sign Up</a>
+  </div>
+</div>
 {% endblock %}
