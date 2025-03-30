@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
   <h2>What would you like to do?</h2>
   <form method="POST">
     {% csrf_token %}
@@ -7,18 +8,11 @@
     <button type="submit" name="choice" value="borrower">Borrow Books</button>
   </form>
 
-  <!-- New button to go to the Profile page -->
-  <form method="GET" action="{% url 'profile' %}">
-    <button type="submit">View Profile</button>
-  </form>
-
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        {% if "error" in message.tags %}
-          <li class="{{ message.tags }}">{{ message }}</li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  {% endif %}
+  <!-- Button to create a collection -->
+  <div class="d-flex gap-2 mt-3">
+    <form method="GET" action="{% url 'create_collection_page' %}">
+      <button type="submit" class="btn btn-success">Create Collection</button>
+    </form>
+  </div>
+  
 {% endblock %}

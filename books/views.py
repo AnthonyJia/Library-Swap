@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from .forms import BookForm
+from .forms import BookForm, CollectionForm
 from .models import Book
 import logging
 
@@ -27,16 +27,6 @@ def provide_book_view(request):
 
 @login_required
 def borrow_books_view(request):
-    # Get the search query from the GET parameters
-    query = request.GET.get('q', '')
-    if query:
-        # Filter books by title, author, or genre (case-insensitive)
-        books = Book.objects.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(genre__icontains=query)
-        ).order_by('-created_at')
-    else:
-        books = Book.objects.all().order_by('-created_at')
-    
-    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
+    books = Book.objects.all().order_by('-created_at')
+    # Render the existing "borrow.html" in "accounts/templates/accounts/"
+    return render(request, 'accounts/borrow.html', {'books': books})
