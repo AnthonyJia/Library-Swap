@@ -23,6 +23,5 @@ urlpatterns = [
     path('profile/', profile_view, name='profile'),
     path('upload-picture/', upload_picture_view, name='upload_picture'),
     path('policies/', lending_policies_view, name='lending_policies'),
-    path('books/', include(('books.urls', 'books'), namespace='books')),
     path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout')
 ]
