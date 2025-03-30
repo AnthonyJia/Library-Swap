@@ -43,7 +43,12 @@ def create_collection_view(request):
              # Now do the validation
             if not collection.books.exists():
                 messages.error(request, "A collection must contain at least one book.")
-                collection.delete()  # Optional cleanup
+                collection.delete() 
+                return redirect('create_collection_page')
+            
+            if request.user.role == 'borrower' and collection.visibility == 'private':
+                messages.error(request, "Patrons cannot create private collections.")
+                collection.delete()
                 return redirect('create_collection_page')
 
             for book in collection.books.all():
@@ -51,13 +56,13 @@ def create_collection_view(request):
                 if collection.visibility == 'private':
                     if other_collections.exists():
                         messages.error(request, f"Book '{book.title}' cannot be added to a private collection if it already belongs to other collections.")
-                        collection.delete()  # Optional cleanup
+                        collection.delete()
                         return redirect('create_collection_page')
                 else:
                     private_collections = other_collections.filter(visibility='private')
                     if private_collections.exists():
                         messages.error(request, f"Book '{book.title}' is already in a private collection and cannot be added to a public collection.")
-                        collection.delete()  # Optional cleanup
+                        collection.delete()
                         return redirect('create_collection_page')
 
             messages.success(request, "Collection created successfully!")
