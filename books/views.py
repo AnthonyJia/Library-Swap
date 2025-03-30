@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import BookForm, CollectionForm
-from .models import Book
+from .models import Book, Collection
 import logging
 
 @login_required
@@ -69,3 +69,8 @@ def create_collection_view(request):
         form = CollectionForm()
 
     return render(request, 'books/create_collection.html', {'form': form})
+
+def list_collection_view(request):
+    collections = Collection.objects.all()  # Query all collections
+    return render(request, 'books/collection_list.html', {'collections': collections})
+

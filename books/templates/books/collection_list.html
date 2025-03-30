@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>All Collections</h2>
+  <ul class="list-group">
+    {% for collection in collections %}
+      <li class="list-group-item">
+        <strong>{{ collection.title }}</strong> — {{ collection.visibility }}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No collections found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
