@@ -115,14 +115,14 @@ def edit_collection_view(request, pk):
     # Only the creator can edit the collection.
     if collection.creator != request.user:
         messages.error(request, "You do not have permission to edit this collection.")
-        return redirect('books:collection_detail', pk=collection.pk)
+        return redirect('books/collection_detail', pk=collection.pk)
     
     if request.method == 'POST':
         form = CollectionForm(request.POST, instance=collection)
         if form.is_valid():
             form.save()
             messages.success(request, "Collection updated successfully!")
-            return redirect('books:collection_detail', pk=collection.pk)
+            return redirect('collection_detail', pk=collection.pk)
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -141,6 +141,6 @@ def delete_collection_view(request, pk):
     if request.method == 'POST':
         collection.delete()
         messages.success(request, "Collection deleted successfully!")
-        return redirect('books:list_collection_page')  # Or another page, such as a collection list view.
+        return redirect('list_collection_page')  # Or another page, such as a collection list view.
     
     return render(request, 'books/delete_collection.html', {'collection': collection})
