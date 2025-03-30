@@ -28,9 +28,17 @@ def provide_book_view(request):
 
 @login_required
 def borrow_books_view(request):
-    books = Book.objects.all().order_by('-created_at')
-    # Render the existing "borrow.html" in "accounts/templates/accounts/"
-    return render(request, 'accounts/borrow.html', {'books': books})
+    query = request.GET.get('q', '')
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__icontains=query)
+        ).order_by('-created_at')
+    else:
+        books = Book.objects.all().order_by('-created_at')
+    
+    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
 
 @login_required
 def create_collection_view(request):
