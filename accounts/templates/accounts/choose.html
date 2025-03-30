@@ -12,6 +12,10 @@
     <button type="submit">View Profile</button>
   </form>
 
+  <form method = "GET" action = "{% url 'chat:chat' %}">
+    <button type="submit">Go to Chat</button>
+  </form>
+
   {% if messages %}
     <ul class="messages">
       {% for message in messages %}

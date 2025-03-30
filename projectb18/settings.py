@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
+    'chat',
+    'django_htmx',
 ]
 
 # Middleware
@@ -48,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 # Authentication Backends
@@ -102,7 +105,7 @@ DATABASES = {
 }
 
 # django-allauth settings
-SITE_ID = 8
+SITE_ID = 10
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True
