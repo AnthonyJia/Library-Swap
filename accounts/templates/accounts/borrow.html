@@ -26,6 +26,11 @@
         <p><strong>Genre:</strong> {{ book.genre }}</p>
         <p>{{ book.description }}</p>
         <p>Uploaded by: {{ book.user.email }}</p>
+        
+        <form method = "GET" action = "{% url 'chat:chat_view' %}">
+          <button type="submit">Request to borrow / Chat with provider</button>
+        </form>
+
       </div>
     {% empty %}
       <p>No books found.</p>
