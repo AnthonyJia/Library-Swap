@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
 from .forms import UserImageForm
 from books.forms import BookForm
+from books.models import Book
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -51,7 +51,17 @@ def provide_view(request):
 
 @login_required
 def borrow_view(request):
-    return render(request, 'accounts/borrow.html')
+    query = request.GET.get('q', '')
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__icontains=query)
+        ).order_by('-created_at')
+    else:
+        books = Book.objects.all().order_by('-created_at')
+    
+    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
 
 @login_required
 def profile_view(request):
@@ -77,3 +87,8 @@ def upload_picture_view(request):
         form = UserImageForm(instance=request.user)
 
     return render(request, 'accounts/upload_picture.html', {'form': form})
+
+from django.shortcuts import render
+
+def lending_policies_view(request):
+    return render(request, 'accounts/lending_policies.html')
