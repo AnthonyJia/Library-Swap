@@ -25,3 +25,4 @@ boto3
 Pillow
 django-htmx
 django-cleanup
+channels[daphne]

@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+
 {% block content %} 
 
 <wrapper class="block max-w-2xl mx-auto my-10 px-6">
@@ -21,9 +23,10 @@
         <div class="sticky bottom-0 z-10 p-2 bg-gray-800">
             <div class="flex items-center rounded-x1 px-2 py-2">
                 <form id="chat_message_form" method = "POST" class="w-full"
-                    hx-post="{% url 'chat:chat_view' %}"
-                    hx-target="#chat_messages"
-                    hx-swap="beforeend">
+                    hx-ext="ws"
+                    ws-connect="/ws/chatroom/public-chat"
+                    ws-send
+                    >
                     {% csrf_token %}
                     {{ form }}
                 </form>
@@ -31,7 +34,6 @@
         </div>
     </div>
 </wrapper>
-
-<script src="https://unpkg.com/htmx.org@1.9.2"></script>
-
+<script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+<script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
 {% endblock %}
