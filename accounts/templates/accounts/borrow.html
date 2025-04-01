@@ -27,9 +27,11 @@
         <p>{{ book.description }}</p>
         <p>Uploaded by: {{ book.user.email }}</p>
         
-        <form method = "GET" action = "{% url 'chat:chat_view' %}">
+        {% if user != book.user %}
+        <form method = "GET" action = "{% url 'chat:start-chat' book.user.username%}">
           <button type="submit">Request to borrow / Chat with provider</button>
         </form>
+        {% endif %}
 
       </div>
     {% empty %}

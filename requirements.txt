@@ -26,3 +26,4 @@ Pillow
 django-htmx
 django-cleanup
 channels[daphne]
+shortuuid
