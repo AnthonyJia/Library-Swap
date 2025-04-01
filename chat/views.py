@@ -21,7 +21,7 @@ def chat_view(request):
                 'message': message,
                 'user' : request.user
             }
-            return render(request,'chat/partials/chat_message_p.html',context)
+            return render(request,'chat\partials\chat_message_p.html',context)
     
     return render(request, 'chat.html', {'chat_messages': chat_messages, 'form':form})
 
