@@ -25,9 +25,17 @@ def provide_book_view(request):
 
 @login_required
 def borrow_books_view(request):
-    books = Book.objects.all().order_by('-created_at')
+    # Fetch all private collections
+    private_collections = Collection.objects.filter(visibility = 'private')
+
+    # Get the books that belong to private collections (via ManyToMany field)
+    private_books = Book.objects.filter(collection__in=private_collections)
+
+     # Fetch all books excluding those that are in private collections
+    public_books = Book.objects.exclude(id__in=private_books.values('id')).order_by('-created_at')
+
     # Render the existing "borrow.html" in "accounts/templates/accounts/"
-    return render(request, 'accounts/borrow.html', {'books': books})
+    return render(request, 'accounts/borrow.html', {'books': public_books})
 
 @login_required
 def create_collection_view(request):
