@@ -23,7 +23,6 @@ def provide_book_view(request):
     logger.debug("DEBUG: form fields = %s", list(form.fields.keys()))
     return render(request, 'accounts/provide.html', {'form': form})
 
-@login_required
 def borrow_books_view(request):
     # Fetch all private collections
     private_collections = Collection.objects.filter(visibility = 'private')

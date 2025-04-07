@@ -51,19 +51,6 @@ def provide_view(request):
     return render(request, 'accounts/provide.html', {'form': form})
 
 @login_required
-def borrow_view(request):
-    # Fetch all private collections
-    private_collections = Collection.objects.filter(visibility = 'private')
-
-    # Get the books that belong to private collections (via ManyToMany field)
-    private_books = Book.objects.filter(collection__in=private_collections)
-
-     # Fetch all books excluding those that are in private collections
-    public_books = Book.objects.exclude(id__in=private_books.values('id')).order_by('-created_at')
-    
-    return render(request, 'accounts/borrow.html', {'books' : public_books})
-
-@login_required
 def profile_view(request):
     """
     Displays the user’s current profile (including profile picture).
