@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ book.title }}</h2>
+  {% if book.image %}
+    <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width:300px;">
+  {% endif %}
+  <p><strong>Author:</strong> {{ book.author }}</p>
+  <p><strong>Genre:</strong> {{ book.genre }}</p>
+  <p>{{ book.description }}</p>
+  <p><strong>Uploaded by:</strong> {{ book.user.email }}</p>
+  {% if book.borrowed_by %}
+    <p><strong>Borrowed by:</strong> {{ book.borrowed_by.email }} on {{ book.borrowed_at|date:"M j, Y, g:i a" }}</p>
+  {% else %}
+    <p><em>This book is available for borrowing.</em></p>
+  {% endif %}
+{% endblock %}

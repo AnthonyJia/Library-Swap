@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
 class Book(models.Model):
     user = models.ForeignKey(
@@ -15,6 +16,8 @@ class Book(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='book_covers/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    borrowed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='borrowed_books')
+    borrowed_at = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # Automatically set uploader_email if not already set and user exists.
@@ -24,6 +27,9 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def is_available(self):
+        return self.borrowed_by is None
     
 class Collection(models.Model):
     PRIVACY_CHOICES = [

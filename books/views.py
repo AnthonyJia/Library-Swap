@@ -6,6 +6,7 @@ from .forms import BookForm, CollectionForm
 from .models import Book, Collection
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -163,3 +164,20 @@ def delete_collection_view(request, pk):
         return redirect('list_collection_page')  # Or another page, such as a collection list view.
     
     return render(request, 'books/delete_collection.html', {'collection': collection})
+
+@login_required
+def borrow_book(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+
+    if book.is_available():
+        book.borrowed_by = request.user
+        book.borrowed_at = timezone.now()
+        book.save()
+    # else: maybe show a message "Already borrowed."
+
+    return redirect('book_detail', book_id=book.id) 
+
+@login_required
+def book_detail(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    return render(request, 'books/detail.html', {'book': book})

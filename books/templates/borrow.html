@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Available Books</h1>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for book in books %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          {% if book.image %}
+            <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+            <p class="card-text"><strong>Genre:</strong> {{ book.genre }}</p>
+            {% if book.is_available %}
+              <a href="{% url 'borrow_book' book.id %}" class="btn btn-primary">Borrow</a>
+            {% else %}
+              {% if book.borrowed_by == request.user %}
+                <button class="btn btn-warning" disabled>You Borrowed This</button>
+              {% else %}
+                <button class="btn btn-secondary" disabled>Borrowed</button>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No books available.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
