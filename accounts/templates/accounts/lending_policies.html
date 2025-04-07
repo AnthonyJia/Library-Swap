@@ -1,10 +1,41 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<h1>Terms</h1>
-<p>Here are the details for a standard lending policy</p>
-<ul>
-  <li>Lending period: 14 days</li>
-  <li>Loss or damage: User is responsible for any loss or damage</li>
-  <li>Returns: Must return by the due date, or late fees apply</li>
-</ul>
+
+<!-- Container for your Lending Policy plus the GitHub ToS content -->
+<div class="terms-container" style="max-width: 960px; margin: 2rem auto; padding: 1rem; line-height: 1.5;">
+
+  <!-- Your standard lending policy -->
+  <h1>Terms</h1>
+  <p>Here are the details for a standard lending policy:</p>
+  <ul>
+    <li>Lending period: 14 days</li>
+    <li>Loss or damage: User is responsible for any loss or damage</li>
+    <li>Returns: Must return by the due date, or late fees apply</li>
+  </ul>
+
+  <!-- The Library Swap-style content -->
+  <h1 class="mt-5">Library Swap Terms of Service</h1>
+
+  <div class="toc">
+    <h2>In this article</h2>
+    <ul>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#the-github-terms-of-service">Library Swap Terms of Service</a></li>
+      <li><a href="#a-definitions">A. Definitions</a></li>
+      <li><a href="#b-account-terms">B. Account Terms</a></li>
+      <!-- etc. more anchor links as needed -->
+    </ul>
+  </div>
+
+  <p>Thank you for using Library Swap! We are happy you are here. Please read this Terms of Service agreement...</p>
+
+  <h2 id="summary">Summary</h2>
+  <p>...</p>
+
+  <div class="mt-3 mb-5">
+    <a href="{% url 'choose' %}" class="btn btn-secondary">Back</a>
+  </div>
+
+</div>
 {% endblock %}

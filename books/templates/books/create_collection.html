@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Create Collection</h1>
+<h1 class="mt-4">Create Collection</h1>
 
-<form method="post">
+<form method="post" class="mb-4">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Create</button>
 </form>
+
+<div class="mt-1 mb-5">
+    <a href="{% url 'choose' %}" class="btn btn-secondary">
+      Back
+    </a>  
+  </div>
+
 {% endblock %}

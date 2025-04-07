@@ -8,6 +8,12 @@
     <button type="submit">Upload</button>
   </form>
 
+  <div class="mt-3">
+    <button type="button" class="btn btn-secondary" onclick="window.history.back();">
+      Back
+    </button>
+  </div>
+
   {% if messages %}
     <ul class="messages">
       {% for message in messages %}
