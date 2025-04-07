@@ -17,6 +17,11 @@ class CustomUser(AbstractUser):
     # Images will be uploaded to S3 in the 'profile_pics/' folder.
     image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
+    # Additional fields
+    birthday = models.DateField(blank=True, null=True)
+    interests = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
     def save(self, *args, **kwargs):
         """
         Overridden save method:

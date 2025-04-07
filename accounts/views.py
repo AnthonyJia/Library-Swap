@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import UserImageForm
+from .forms import UserImageForm, ProfileForm
 from books.forms import BookForm
 from books.models import Book
 
@@ -92,3 +92,21 @@ from django.shortcuts import render
 
 def lending_policies_view(request):
     return render(request, 'accounts/lending_policies.html')
+
+@login_required
+def edit_profile_view(request):
+    """
+    Displays and processes the form for updating the user’s profile.
+    """
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('profile')  # Go back to the profile page
+        else:
+            messages.error(request, "There was an error updating your profile.")
+    else:
+        form = ProfileForm(instance=request.user)
+
+    return render(request, 'accounts/edit_profile.html', {'form': form})
