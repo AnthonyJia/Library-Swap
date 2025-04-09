@@ -77,3 +77,21 @@ def upload_picture_view(request):
         form = UserImageForm(instance=request.user)
 
     return render(request, 'accounts/upload_picture.html', {'form': form})
+
+@login_required
+def edit_profile_view(request):
+    """
+    Displays and processes the form for updating the user’s profile.
+    """
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('profile')  # Go back to the profile page
+        else:
+            messages.error(request, "There was an error updating your profile.")
+    else:
+        form = ProfileForm(instance=request.user)
+
+    return render(request, 'accounts/edit_profile.html', {'form': form})
