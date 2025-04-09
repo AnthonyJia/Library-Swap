@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserImageForm
 from books.forms import BookForm
+from books.models import Book, Collection
 from books.models import Book
 
 def home(request):
@@ -51,17 +52,7 @@ def provide_view(request):
 
 @login_required
 def borrow_view(request):
-    query = request.GET.get('q', '')
-    if query:
-        books = Book.objects.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(genre__icontains=query)
-        ).order_by('-created_at')
-    else:
-        books = Book.objects.all().order_by('-created_at')
-    
-    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
+    return render(request, 'accounts/borrow.html')
 
 @login_required
 def profile_view(request):
