@@ -12,6 +12,9 @@ def home(request):
 def anonymous_view(request):
     return render(request, 'accounts/anonymous.html')
 
+def lending_policies_view(request):
+     return render(request, 'accounts/lending_policies.html')
+
 @login_required
 def choose_view(request):
     if request.method == 'POST':
