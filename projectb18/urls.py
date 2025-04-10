@@ -7,4 +7,5 @@ urlpatterns = [
    path('accounts/login/', LoginView.as_view(template_name='accounts/login.html'), name='account_login'),
    path('', include('accounts.urls')),
    path('books/', include('books.urls')),
+   path("chat/", include("chat.urls")),
 ]

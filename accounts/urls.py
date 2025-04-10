@@ -23,5 +23,6 @@ urlpatterns = [
     path('upload-picture/', upload_picture_view, name='upload_picture'),
     path('policies/', lending_policies_view, name='lending_policies'),
     path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
-    path('profile/edit/', edit_profile_view, name='edit_profile'),
+    path('profile/edit/', edit_profile_view, name='edit_profile'),,
+    path('chat/', include("chat.urls", namespace='chat')),
 ]

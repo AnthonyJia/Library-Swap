@@ -34,9 +34,21 @@
             {% csrf_token %}
             <button type="submit" class="nav-item nav-link btn btn-outline-dark text-white">Logout</button>
           </form>
-        {% else %}
-          <div class="nav-item">
-            <a class="nav-link btn btn-outline-dark text-white me-3" href="{% url 'account_login' %}">Sign In</a>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="chatroomsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                My Chat Rooms
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="chatroomsDropdown">
+                {% for chatroom in user.chat_groups.all %}
+                  {% if chatroom.is_private %}
+                    {% for member in chatroom.members.all %}
+                      {% if member != user %}
+                        <li><a class="dropdown-item" href="{% url 'chat:chatroom' chatroom.group_name %}">{{ chatroom.group_name }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+            </ul>
           </div>
         {% endif %}
       </div>

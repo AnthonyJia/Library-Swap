@@ -23,3 +23,7 @@ whitenoise==6.9.0
 django-storages
 boto3
 Pillow
+django-htmx
+django-cleanup
+channels[daphne]
+shortuuid

@@ -1,0 +1,41 @@
+{% if message.author == user %}
+<!-- User's Own Message -->
+<li class="flex justify-end mb-4">
+    <div class="text-right text-sm font-light text-gray-300 pr-2">
+        You
+    </div>
+    <div class="bg-green-200 rounded-l-lg rounded-tr-lg p-4 max-w-[75%]">
+        <span>{{ message.body }}</span>
+    </div>
+    <div class="flex items-end">
+        <svg height="13" width="8">
+            <path fill="#bbf7d0" d="M6.3,10.4C1.5,8.7,0.9,5.5,0,0.2L0,13l5.2,0C7,13,9.6,11.5,6.3,10.4z"/>
+        </svg>
+    </div>
+</li>
+{% else %}
+<!-- Other User's Message -->
+<li>
+    <div class="flex justify-start items-center">
+        
+        <!-- User Profile Picture -->
+        <div class="flex items-end mr-2">
+            {% if message.author.image %}
+                <img class="w-8 h-8 rounded-full object-cover" src="{{ message.author.image.url }}">
+            {% else %}
+                <img class="w-8 h-8 rounded-full object-cover" src="https://via.placeholder.com/50">
+            {% endif %}
+        </div>
+
+        <!-- Author Name -->
+        <div class="text-sm font-light text-gray-300 mb-1">
+            {{ message.author.username }}
+        </div>
+
+        <!-- Chat Bubble -->
+        <div class="bg-white p-4 max-w-[75%] rounded-r-lg rounded-tl-lg">
+            <span>{{ message.body }}</span>
+        </div>  
+    </div>
+</li>
+{% endif %}
