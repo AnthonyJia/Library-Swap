@@ -102,6 +102,7 @@ DATABASES = {
 }
 
 # django-allauth settings
+# site id = 8 for heroku!
 SITE_ID = 8
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = False
