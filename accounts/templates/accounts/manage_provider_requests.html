@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Provider Requests</h2>
+  <h2>Pending Provider Requests</h2>
   {% if pending_users %}
     <ul class="list-group">
       {% for user in pending_users %}
-        <li class="list-group-item">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
           {{ user.username }} ({{ user.email }})
           <form method="POST" action="{% url 'approve_provider' user.id %}" style="display: inline;">
             {% csrf_token %}

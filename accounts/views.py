@@ -116,19 +116,21 @@ def manage_provider_requests_view(request):
         messages.error(request, "Access denied.")
         return redirect('choose')
     
-    pending_users = CustomUser.objects.filter(provider_requested=True, is_provider_approved=False)
+    # List all users who are not provider approved.
+    pending_users = CustomUser.objects.filter(is_provider_approved=False)
     
     return render(request, 'accounts/manage_provider_requests.html', {'pending_users': pending_users})
 
 @login_required
 def approve_provider_view(request, user_id):
+    # Only allow provider-approved users to approve requests.
     if not request.user.is_provider_approved:
         messages.error(request, "Access denied.")
         return redirect('choose')
     
     user_to_approve = get_object_or_404(CustomUser, id=user_id)
     user_to_approve.is_provider_approved = True
-    user_to_approve.provider_requested = False
+    user_to_approve.provider_requested = False  # (Optional, if you were using this field)
     user_to_approve.save()
-    messages.success(request, f"{user_to_approve.username} has been provider approved.")
+    messages.success(request, f"{user_to_approve.username} has been approved as a provider.")
     return redirect('manage_provider_requests')
