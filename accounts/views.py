@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
 from .forms import UserImageForm, ProfileForm
 from books.forms import BookForm
 from books.models import Book, Collection
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+CustomUser = get_user_model()
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -27,8 +29,8 @@ def choose_view(request):
                 request.user.save()
                 return redirect('provide_page')
             else:
-                messages.error(request, "You do not have permission to be a provider yet.")
-                return redirect('choose')
+                messages.error(request, "You do not have permission to be a provider yet. Please request provider status below.")
+                return redirect('request_provider')  # Redirect to a view where they can request provider status.
         elif choice == 'borrower':
             # They want to be a borrower
             request.user.role = 'borrower'
@@ -95,3 +97,38 @@ def edit_profile_view(request):
         form = ProfileForm(instance=request.user)
 
     return render(request, 'accounts/edit_profile.html', {'form': form})
+
+@login_required
+def request_provider_view(request):
+    user = request.user
+    if not user.is_provider_approved:
+        user.provider_requested = True
+        user.save()
+        messages.success(request, "Your request for provider status has been submitted.")
+    else:
+        messages.info(request, "You are already provider approved.")
+    return redirect('choose')
+
+@login_required
+def manage_provider_requests_view(request):
+    # Only allow provider-approved users to access this page.
+    if not request.user.is_provider_approved:
+        messages.error(request, "Access denied.")
+        return redirect('choose')
+    
+    pending_users = CustomUser.objects.filter(provider_requested=True, is_provider_approved=False)
+    
+    return render(request, 'accounts/manage_provider_requests.html', {'pending_users': pending_users})
+
+@login_required
+def approve_provider_view(request, user_id):
+    if not request.user.is_provider_approved:
+        messages.error(request, "Access denied.")
+        return redirect('choose')
+    
+    user_to_approve = get_object_or_404(CustomUser, id=user_id)
+    user_to_approve.is_provider_approved = True
+    user_to_approve.provider_requested = False
+    user_to_approve.save()
+    messages.success(request, f"{user_to_approve.username} has been provider approved.")
+    return redirect('manage_provider_requests')

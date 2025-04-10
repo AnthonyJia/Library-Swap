@@ -14,7 +14,6 @@ class CustomUser(AbstractUser):
     is_provider_approved = models.BooleanField(default=False)
 
     # New field for storing the user’s profile picture
-    # Images will be uploaded to S3 in the 'profile_pics/' folder.
     image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
 
     # Additional fields
@@ -22,13 +21,20 @@ class CustomUser(AbstractUser):
     interests = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
+    # field to track if a user has requested provider status.
+    provider_requested = models.BooleanField(default=False)
+
     def save(self, *args, **kwargs):
         """
         Overridden save method:
-        - If the user is approved but not currently a provider, set them to 'provider'.
+        - If the user is approved but not currently a provider, set their role to 'provider'.
+        - If the user is provider approved, clear the provider_requested flag.
         """
         if self.is_provider_approved and self.role != 'provider':
             self.role = 'provider'
+        # if a user becomes provider approved, you can clear their request.
+        if self.is_provider_approved:
+            self.provider_requested = False
         super().save(*args, **kwargs)
 
     def __str__(self):
