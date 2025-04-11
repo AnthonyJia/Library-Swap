@@ -187,6 +187,7 @@ def request_borrow_book(request, book_id):
             borrow_request.requester = request.user
             borrow_request.book = book 
             borrow_request.save()
+            messages.success(request, "Borrow request has been submitted successfully!")
             return redirect('book_detail', book_id=book.id)
     else:
         form = BorrowRequestForm()
