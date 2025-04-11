@@ -29,7 +29,7 @@
         
         {% if user != book.user %}
         <form method = "GET" action = "{% url 'chat:start-chat' book.user.username%}">
-          <button type="submit">Request to borrow / Chat with provider</button>
+          <button type="submit">Chat with provider</button>
         </form>
         {% endif %}
 
