@@ -69,9 +69,9 @@ class BorrowRequest(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='borrow_requests')
     requester = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='borrow_requests_list')
-    message = models.TextField(blank=True)
+    message = models.TextField(blank=True, max_length=500)
     requested_at = models.DateTimeField(auto_now_add=True)
-    start_date = models.DateField(null=True, blank=True)
+    start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=REQUEST_STATUS, default='pending')
     approved_at = models.DateTimeField(null=True, blank=True)

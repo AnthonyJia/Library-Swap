@@ -1,5 +1,7 @@
 from django import forms
-from .models import Book, Collection
+from django.utils import timezone
+from datetime import timedelta
+from .models import Book, Collection, BorrowRequest
 
 class BookForm(forms.ModelForm):
     class Meta:
@@ -68,3 +70,51 @@ class CollectionForm(forms.ModelForm):
                 'class': 'form-control select2'
             }),
         }
+
+class BorrowRequestForm(forms.ModelForm):
+    class Meta:
+        model = BorrowRequest
+        fields = ['message', 'start_date', 'end_date'] 
+        labels = {
+            'message': 'Message (Optional)', 
+            'start_date': 'Start Date',
+            'end_date': 'End Date'
+        }
+        widgets = {
+            'message': forms.Textarea(attrs={
+                'maxlength': '500', 
+                'class': 'form-control',
+                'placeholder': 'Why do you want to borrow this book?'
+            }),
+            'start_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'placeholder': 'When do you plan to borrow it?'
+            
+            }),
+            'end_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'placeholder': 'When do you plan to return it?'
+            }),
+        }
+
+    def clean_start_date(self):
+        start_date = self.cleaned_data.get('start_date')
+        today = timezone.now().date()
+        if start_date and start_date < today:
+            raise forms.ValidationError("Start date cannot be in the past.")
+        return start_date
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date and end_date:
+            if end_date <= start_date:
+                raise forms.ValidationError("End date must be after the start date.")
+
+            max_end_date = start_date + timedelta(days=180)
+            if end_date > max_end_date:
+                raise forms.ValidationError("End date cannot be more than 6 months after the start date.")
