@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from .forms import BookForm, CollectionForm
+from .forms import BookForm, CollectionForm, BorrowRequestForm
 from .models import Book, Collection
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
@@ -164,19 +164,35 @@ def delete_collection_view(request, pk):
     
     return render(request, 'books/delete_collection.html', {'collection': collection})
 
-@login_required
-def borrow_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-
-    if book.is_available():
-        book.borrowed_by = request.user
-        book.borrowed_at = timezone.now()
-        book.save()
-    # else: maybe show a message "Already borrowed."
-
-    return redirect('book_detail', book_id=book.id) 
 
 @login_required
 def book_detail(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     return render(request, 'books/detail.html', {'book': book})
+
+@login_required
+def request_borrow_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+
+    # Check if the book already has a current borrower
+    if book.current_borrower:
+        # If the book has a borrower, show a message and prevent form submission
+        messages.error(request, f"The book '{book.title}' is already borrowed by someone else.")
+        return redirect('book_detail', book_id=book.id)
+
+    if request.method == 'POST':
+        form = BorrowRequestForm(request.POST)
+        if form.is_valid():
+            borrow_request = form.save(commit=False)
+            borrow_request.requester = request.user
+            borrow_request.book = book 
+            borrow_request.save()
+            return redirect('book_detail', book_id=book.id)
+    else:
+        form = BorrowRequestForm()
+
+    return render(request, 'books/borrow_request_form.html', {
+        'form': form,
+        'book': book
+    })
+

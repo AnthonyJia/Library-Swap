@@ -16,6 +16,15 @@ class Book(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='book_covers/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    current_borrower = models.ForeignKey(
+    settings.AUTH_USER_MODEL,
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL,
+    related_name='borrowed_books',
+    help_text="User who currently has this book borrowed"
+)
+
 
     def save(self, *args, **kwargs):
         # Automatically set uploader_email if not already set and user exists.
@@ -27,7 +36,10 @@ class Book(models.Model):
         return self.title
     
     def is_available(self):
-        return not self.borrow_requests.filter(status='approved').exists()
+        """
+        Returns True if the book is available (i.e., no current borrower).
+        """
+        return self.current_borrower is None
     
 class Collection(models.Model):
     PRIVACY_CHOICES = [
