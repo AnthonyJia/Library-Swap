@@ -84,7 +84,7 @@ class BorrowRequest(models.Model):
     message = models.TextField(blank=True, max_length=500)
     requested_at = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField(null=False, blank=False)
-    end_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=False, blank=False)
     status = models.CharField(max_length=10, choices=REQUEST_STATUS, default='pending')
     approved_at = models.DateTimeField(null=True, blank=True)
     responded_by = models.ForeignKey(
