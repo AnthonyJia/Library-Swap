@@ -16,10 +16,18 @@
     <form method="GET" action="{% url 'list_collection_page' %}">
       <button type="submit" class="btn btn-primary">Browse Collections</button>
     </form>
-    <!-- NEW: Right-aligned borrow request button -->
-    <form method="GET" action="{% url 'list_borrow_request_page' %}" class="ms-auto">
-      <button type="submit" class="btn btn-warning">Manage Borrow Requests</button>
-    </form>
+    <div class="d-flex gap-2 ms-auto">
+      {% if user.role == 'provider' %}
+      <!-- NEW: Right-aligned borrow request button -->
+      <form method="GET" action="{% url 'list_borrow_request_page' %}">
+        <button type="submit" class="btn btn-outline-warning">Manage Borrow Requests</button>
+      </form>
+      {% endif %}
+      <!-- NEW: My Borrow Requests (for borrowers) -->
+      <form method="GET" action="{% url 'list_my_borrow_request_page' %}">
+        <button type="submit" class="btn btn-outline-success">My Borrow Requests</button>
+      </form>
+    </div>
   </div>
 
   <!-- If user is provider approved, show link to manage requests -->

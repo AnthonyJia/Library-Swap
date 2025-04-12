@@ -11,6 +11,7 @@ from .views import (
     book_detail,
     request_borrow_book,
     list_borrow_request_view,
+    list_my_borrow_request_view,
     handle_borrow_request_view
 )
 
@@ -25,5 +26,6 @@ urlpatterns = [
     path('request_borrow/<int:book_id>/', request_borrow_book, name='request_borrow_book'),
     path('collection/<int:pk>/delete/', delete_collection_view, name='delete_collection'),
     path('borrow_request/list/', list_borrow_request_view, name='list_borrow_request_page'),
+    path('borrow_request/my_list/', list_my_borrow_request_view, name='list_my_borrow_request_page'),
     path('borrow_request/<int:request_id>/<str:action>/', handle_borrow_request_view, name='handle_borrow_request')
 ]

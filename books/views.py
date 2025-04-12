@@ -197,6 +197,11 @@ def request_borrow_book(request, book_id):
         'book': book
     })
 
+@login_required
+def list_my_borrow_request_view(request):
+    borrow_requests = BorrowRequest.objects.filter(requester = request.user)
+    return render(request, 'books/my_borrow_request_list.html', {'borrow_requests': borrow_requests})
+
 
 @login_required
 def list_borrow_request_view(request):
