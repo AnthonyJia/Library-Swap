@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .forms import BookForm, CollectionForm, BorrowRequestForm
-from .models import Book, Collection
+from .models import Book, Collection, BorrowRequest
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -196,4 +196,52 @@ def request_borrow_book(request, book_id):
         'form': form,
         'book': book
     })
+
+
+@login_required
+def list_borrow_request_view(request):
+    borrow_requests = BorrowRequest.objects.all()
+    return render(request, 'books/borrow_request_list.html', {'borrow_requests': borrow_requests})
+
+@login_required
+def handle_borrow_request_view(request, request_id, action):
+    borrow_request = get_object_or_404(BorrowRequest, pk=request_id)
+
+    if not request.user.role == 'provider':
+        messages.error(request, "You don't have permission to perform this action.")
+        return redirect('choose')  # Adjust this to wherever you want unauthorized users to go
+
+    if action == 'accept':
+        if borrow_request.book.current_borrower is None:
+            borrow_request.status = 'approved'
+            borrow_request.responded_by = request.user
+            borrow_request.approved_at = timezone.now()
+            borrow_request.book.current_borrower = borrow_request.requester
+            borrow_request.book.save()
+            messages.success(request, "Request accepted.")
+        else:
+            messages.error(request, "Book is currently being borrowed by someone else.")
+            
+    elif action == 'decline':
+        borrow_request.status = 'rejected'
+        borrow_request.responded_by = request.user
+        borrow_request.approved_at = timezone.now()
+        messages.success(request, "Request declined.")
+
+    elif action == 'returned':
+        if borrow_request.status != 'approved':
+            messages.warning(request, "Only approved requests can be marked as returned.")
+        else:
+            borrow_request.status = 'returned'
+            borrow_request.book.current_borrower = None
+            borrow_request.book.save()
+            messages.success(request, "Book marked as returned.")
+
+    else:
+        messages.error(request, "Invalid action.")
+        return redirect('choose') 
+
+    borrow_request.save()
+    return redirect('book_detail', book_id=borrow_request.book.id) 
+
 
