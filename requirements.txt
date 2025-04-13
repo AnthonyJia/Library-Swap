@@ -27,3 +27,5 @@ django-htmx
 django-cleanup
 channels[daphne]
 shortuuid
+channels-redis
+channels
