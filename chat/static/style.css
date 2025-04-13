@@ -1,0 +1,14 @@
+chat_box {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    background-color: #f5a2f0;
+
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 60%;
+    flex-direction: column;
+}

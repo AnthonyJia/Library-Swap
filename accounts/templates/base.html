@@ -43,7 +43,15 @@
                   {% if chatroom.is_private %}
                     {% for member in chatroom.members.all %}
                       {% if member != user %}
-                        <li><a class="dropdown-item" href="{% url 'chat:chatroom' chatroom.group_name %}">{{ chatroom.group_name }}</a></li>
+                        <li>
+                          <a class="dropdown-item" href="{% url 'chat:chatroom' chatroom.group_name %}">
+                            {% for other_user in chatroom.members.all %}
+                            {% if user != other_user %}
+                            {{ other_user.username }}
+                            {% endif %}
+                            {% endfor %}
+                          </a>
+                        </li>
                       {% endif %}
                     {% endfor %}
                   {% endif %}
