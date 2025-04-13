@@ -13,7 +13,9 @@ from .views import (
     request_provider_view,
     manage_provider_requests_view,
     approve_provider_view,
-    borrow_view
+    borrow_view,
+    my_books_view,
+    delete_book_view
 )
 
 urlpatterns = [
@@ -33,4 +35,6 @@ urlpatterns = [
     path('manage-provider-requests/', manage_provider_requests_view, name='manage_provider_requests'),
     path('approve-provider/<int:user_id>/', approve_provider_view, name='approve_provider'),
     path('borrow/', borrow_view, name='borrow_page'),
+    path('my-books/', my_books_view, name='my_books'),
+    path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
 ]

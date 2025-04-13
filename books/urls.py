@@ -13,6 +13,8 @@ from .views import (
     list_borrow_request_view,
     list_my_borrow_request_view,
     handle_borrow_request_view,
+    my_books_view,
+    delete_book_view,
 )
 
 urlpatterns = [
@@ -28,4 +30,6 @@ urlpatterns = [
     path('borrow_request/list/', list_borrow_request_view, name='list_borrow_request_page'),
     path('borrow_request/my_list/', list_my_borrow_request_view, name='list_my_borrow_request_page'),
     path('borrow_request/<int:request_id>/<str:action>/', handle_borrow_request_view, name='handle_borrow_request'),
+    path('my-books/', my_books_view, name='my_books'),
+    path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
 ]

@@ -264,3 +264,23 @@ def borrow_books_view(request):
     else:
         books = Book.objects.all().order_by('-created_at')
     return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
+
+@login_required
+def my_books_view(request):
+    if not request.user.is_provider_approved:
+        messages.error(request, "Access denied: You must be provider-approved to view your lending books.")
+        return redirect('choose')
+
+    books = Book.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'books/my_books.html', {'books': books})
+
+@login_required
+def delete_book_view(request, book_id):
+    book = get_object_or_404(Book, id=book_id, user=request.user)
+    
+    if request.method == 'POST':
+        book.delete()
+        messages.success(request, "Book deleted successfully.")
+        return redirect('my_books')
+
+    return render(request, 'books/confirm_delete.html', {'book': book})
