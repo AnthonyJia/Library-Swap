@@ -150,13 +150,16 @@ class TestViews(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.role, 'provider')
 
-    def test_choose_view_post_provider_not_approved(self):
-        # User is not approved as provider
-        self.client.login(username='testuser', password='testpass')
-        response = self.client.post(reverse('choose'), {'choice': 'provider'})
-        self.assertRedirects(response, reverse('choose'))
-        self.user.refresh_from_db()
-        self.assertNotEqual(self.user.role, 'provider')
+def test_choose_view_post_provider_not_approved(self):
+    # User is not approved as provider
+    self.client.login(username='testuser', password='testpass')
+    response = self.client.post(reverse('choose'), {'choice': 'provider'}, follow=True)
+    self.assertEqual(response.status_code, 200)
+    # Checks that the last redirect in the chain goes to the 'choose' URL
+    self.assertEqual(response.redirect_chain[-1][0], reverse('choose'))
+    # Ensures role is not changed to provider
+    self.user.refresh_from_db()
+    self.assertNotEqual(self.user.role, 'provider')
 
     def test_choose_view_post_borrower(self):
         # Tests that a user posting 'borrower' is redirected to the borrow page and their role is set to 'borrower'
