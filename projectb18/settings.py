@@ -47,11 +47,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [{
-                "address": os.environ.get("REDIS_URL"),
-                "ssl": True,
-                "ssl_cert_reqs": ssl.CERT_NONE,  # Disable certificate verification
-            }],
+            "hosts": [os.environ.get("REDIS_URL", "rediss://:p99ff3982e5577bc63a5024a93d29a96daaa6085863c65b819bcbc28d7ec2a8c9@ec2-52-21-156-131.compute-1.amazonaws.com:31350")],
         },
     },
 }
