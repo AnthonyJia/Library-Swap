@@ -19,23 +19,22 @@
     {% if user.is_provider_approved %}
       <a href="{% url 'manage_provider_requests' %}" class="btn btn-info">Grant Provider Access</a>
     {% endif %}
-  </div>
-
-  <!-- Buttons aligned to the right for My Books and Borrow Requests -->
-  <div class="d-flex justify-content-end gap-2 mt-3">
-    {% if user.role == 'provider' or user.is_provider_approved %}
-      <form method="GET" action="{% url 'my_books' %}">
-        <button type="submit" class="btn btn-outline-info">My Books</button>
+    <!-- Buttons aligned to the right for my books and borrow requests -->
+    <div class="d-flex gap-2 ms-auto">
+      {% if user.role == 'provider' or user.is_provider_approved %}
+        <form method="GET" action="{% url 'my_books' %}">
+          <button type="submit" class="btn btn-outline-info">My Books</button>
+        </form>
+      {% endif %}
+      {% if user.role == 'provider' %}
+        <form method="GET" action="{% url 'list_borrow_request_page' %}">
+          <button type="submit" class="btn btn-outline-warning">Manage Borrow Requests</button>
+        </form>
+      {% endif %}
+      <form method="GET" action="{% url 'list_my_borrow_request_page' %}">
+        <button type="submit" class="btn btn-outline-success">My Borrow Requests</button>
       </form>
-    {% endif %}
-    {% if user.role == 'provider' %}
-      <form method="GET" action="{% url 'list_borrow_request_page' %}">
-        <button type="submit" class="btn btn-outline-warning">Manage Borrow Requests</button>
-      </form>
-    {% endif %}
-    <form method="GET" action="{% url 'list_my_borrow_request_page' %}">
-      <button type="submit" class="btn btn-outline-success">My Borrow Requests</button>
-    </form>
+    </div>
   </div>
 
 {% endblock %}
