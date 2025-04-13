@@ -27,6 +27,7 @@
         <p><strong>Genre:</strong> {{ book.genre }}</p>
         <p><strong>Description:</strong> {{ book.description }}</p>
         <p><strong>Uploaded by:</strong> {{ book.user.email }}</p>
+        <p><strong>Availability:</strong> {{book.is_available }}</p>
         
         {% if user != book.user %}
 
