@@ -6,13 +6,14 @@
     Logged in as: {{ request.user.email }}
   </div>
 
-  <!-- Search form -->
-  <form method="get" action="">
-      <div class="input-group mb-3">
-         <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by title, author, or genre">
-         <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </div>
-  </form>
+
+   <!-- Search form -->
+   <form method="get" action="">
+    <div class="input-group mb-3">
+       <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by title, author, or genre">
+       <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </div>
+   </form>
 
   <!-- List of books -->
   <div class="book-list">

@@ -13,6 +13,7 @@ from .views import (
     request_provider_view,
     manage_provider_requests_view,
     approve_provider_view,
+    borrow_view
 )
 
 urlpatterns = [
@@ -31,4 +32,5 @@ urlpatterns = [
     path('request-provider/', request_provider_view, name='request_provider'),
     path('manage-provider-requests/', manage_provider_requests_view, name='manage_provider_requests'),
     path('approve-provider/<int:user_id>/', approve_provider_view, name='approve_provider'),
+    path('borrow/', borrow_view, name='borrow_page'),
 ]

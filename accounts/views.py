@@ -6,6 +6,9 @@ from books.forms import BookForm
 from books.models import Book, Collection
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.shortcuts import render
+from django.db.models import Q
+from books.models import Book
 CustomUser = get_user_model()
 
 def home(request):
@@ -134,3 +137,19 @@ def approve_provider_view(request, user_id):
     user_to_approve.save()
     messages.success(request, f"{user_to_approve.username} has been approved as a provider.")
     return redirect('manage_provider_requests')
+
+@login_required
+def borrow_view(request):
+    query = request.GET.get('q', '')
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__icontains=query)
+        ).order_by('-created_at')
+    else:
+        books = Book.objects.all().order_by('-created_at')
+    
+    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
+
+    

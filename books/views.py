@@ -7,6 +7,9 @@ from .models import Book, Collection, BorrowRequest
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.shortcuts import render
+from django.db.models import Q
+from books.models import Book
 
 logger = logging.getLogger(__name__)
 
@@ -249,4 +252,15 @@ def handle_borrow_request_view(request, request_id, action):
     borrow_request.save()
     return redirect('book_detail', book_id=borrow_request.book.id) 
 
-
+@login_required
+def borrow_books_view(request):
+    query = request.GET.get('q', '').strip()
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__icontains=query)
+        ).order_by('-created_at')
+    else:
+        books = Book.objects.all().order_by('-created_at')
+    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
