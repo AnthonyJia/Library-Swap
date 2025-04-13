@@ -2,18 +2,43 @@
 {% block content %}
   <h2>{{ collection.title }}</h2>
   <p>Visibility: {{ collection.visibility }}</p>
+  
   {% if collection.creator == request.user %}
-  <a href="{% url 'edit_collection' collection.pk %}" class="btn btn-warning">Edit Collection</a>
-  <a href="{% url 'delete_collection' collection.pk %}" class="btn btn-danger">Delete Collection</a>
+    <a href="{% url 'edit_collection' collection.pk %}" class="btn btn-warning">Edit Collection</a>
+    <a href="{% url 'delete_collection' collection.pk %}" class="btn btn-danger">Delete Collection</a>
   {% endif %}
-  <h3>Books in This Collection</h3>
-  <ul>
+  
+  <h3 class="mt-4">Books in This Collection</h3>
+  <div class="book-list">
     {% for book in books %}
-      <li>{{ book.title }}</li>
+      <div class="book-item mb-4 p-3 border">
+        {% if book.image %}
+          <img src="{{ book.image.url }}" alt="{{ book.title }}" class="img-fluid mb-2" style="max-width:200px;">
+        {% endif %}
+        <h4>{{ book.title }}</h4>
+        <p><strong>Author:</strong> {{ book.author }}</p>
+        <p><strong>Genre:</strong> {{ book.genre }}</p>
+        <p>{{ book.description }}</p>
+        <p><small>Uploaded by: {{ book.user.email }}</small></p>
+        
+        {% if user != book.user %}
+          <div class="d-flex gap-2">
+            <form method="POST" action="{% url 'request_borrow_book' book.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Request to Borrow</button>
+            </form>
+            <form method="GET" action="{% url 'chat:start-chat' book.user.username %}">
+              <button type="submit" class="btn btn-secondary">Chat with Provider</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
     {% empty %}
-      <li>No books in this collection.</li>
+      <p>No books in this collection.</p>
     {% endfor %}
-  </ul>
-
-  <p><a href="{% url 'list_collection_page' %}">Back to Collections</a></p>
+  </div>
+  
+  <div class="mt-3">
+    <a href="{% url 'list_collection_page' %}" class="btn btn-secondary">Back to Collections</a>
+  </div>
 {% endblock %}
