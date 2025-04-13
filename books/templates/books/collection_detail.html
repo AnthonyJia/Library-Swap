@@ -27,9 +27,6 @@
               {% csrf_token %}
               <button type="submit" class="btn btn-primary">Request to Borrow</button>
             </form>
-            <form method="GET" action="{% url 'chat:start-chat' book.user.username %}">
-              <button type="submit" class="btn btn-secondary">Chat with Provider</button>
-            </form>
           </div>
         {% endif %}
       </div>

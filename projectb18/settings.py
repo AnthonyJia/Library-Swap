@@ -3,6 +3,11 @@ import dj_database_url
 from pathlib import Path
 import environ
 import logging
+import ssl
+ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+REDIS_TLS_SKIP_VERIFY=1
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -16,7 +21,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
 DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['projectb18-63ef789a48c4.herokuapp.com', 'localhost', '127.0.0.1'])
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -43,8 +49,14 @@ ASGI_APPLICATION = 'projectb18.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    }
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [{
+                "address": os.environ.get("REDIS_URL", "redis://localhost:6379"),
+                "ssl_context": ssl_context,
+            }],
+        },
+    },
 }
 
 # Middleware
@@ -60,6 +72,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://projectb18-63ef789a48c4.herokuapp.com",
+    # Add any other domains as needed
 ]
 
 # Authentication Backends

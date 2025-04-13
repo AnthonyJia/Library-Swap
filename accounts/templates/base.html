@@ -13,15 +13,16 @@
   <!-- <link rel="stylesheet" href="{% static 'css/github_style.css' %}"> -->
 </head>
 
-<body class="d-flex flex-column min-vh-100" >
+<body class="d-flex flex-column min-vh-100">
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg" data-bs-theme="dark" style="background-color: #f15800;">
     <div class="container">
       <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'choose' %}{% else %}{% url 'home' %}{% endif %}">Library Swap</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- Additional nav links can be added here -->
+      <!-- Additional nav links -->
       <div class="navbar-nav">
         {% if user.is_authenticated %}
           <div class="nav-item">
@@ -34,30 +35,6 @@
             {% csrf_token %}
             <button type="submit" class="nav-item nav-link btn btn-outline-dark text-white">Logout</button>
           </form>
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="chatroomsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                My Chat Rooms
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="chatroomsDropdown">
-                {% for chatroom in user.chat_groups.all %}
-                  {% if chatroom.is_private %}
-                    {% for member in chatroom.members.all %}
-                      {% if member != user %}
-                        <li>
-                          <a class="dropdown-item" href="{% url 'chat:chatroom' chatroom.group_name %}">
-                            {% for other_user in chatroom.members.all %}
-                            {% if user != other_user %}
-                            {{ other_user.username }}
-                            {% endif %}
-                            {% endfor %}
-                          </a>
-                        </li>
-                      {% endif %}
-                    {% endfor %}
-                  {% endif %}
-                {% endfor %}
-            </ul>
-          </div>
         {% endif %}
       </div>
     </div>
@@ -86,8 +63,9 @@
         This system is a class project and is not monitored. Do not submit real or sensitive information.
       </p>
       <p class="mb-0">
-        For official resources, visit  
-        <a href="https://security.virginia.edu/information-policy" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-blue">
+        For official resources, visit
+        <a href="https://security.virginia.edu/information-policy" target="_blank" rel="noopener noreferrer"
+          class="text-decoration-none text-blue">
           UVA Information Policy
         </a>
         &nbsp;|&nbsp;
@@ -112,4 +90,5 @@
     });
   </script>
 </body>
+
 </html>
