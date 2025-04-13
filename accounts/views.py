@@ -138,7 +138,6 @@ def approve_provider_view(request, user_id):
     messages.success(request, f"{user_to_approve.username} has been approved as a provider.")
     return redirect('manage_provider_requests')
 
-@login_required
 def borrow_view(request):
     query = request.GET.get('q', '')
     if query:

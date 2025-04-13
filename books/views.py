@@ -30,18 +30,22 @@ def provide_book_view(request):
     logger.debug("DEBUG: form fields = %s", list(form.fields.keys()))
     return render(request, 'accounts/provide.html', {'form': form})
 
+
 def borrow_books_view(request):
-    # Fetch all private collections
-    private_collections = Collection.objects.filter(visibility = 'private')
-
-    # Get the books that belong to private collections (via ManyToMany field)
+    query = request.GET.get('q', '').strip()
+    private_collections = Collection.objects.filter(visibility='private')
     private_books = Book.objects.filter(collection__in=private_collections)
+    books = Book.objects.exclude(id__in=private_books.values('id'))
 
-     # Fetch all books excluding those that are in private collections
-    public_books = Book.objects.exclude(id__in=private_books.values('id')).order_by('-created_at')
-
-    # Render the existing "borrow.html" in "accounts/templates/accounts/"
-    return render(request, 'accounts/borrow.html', {'books': public_books})
+    if query:
+        books = books.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__icontains=query)
+        )
+    
+    books = books.order_by('-created_at')
+    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
 
 @login_required
 def create_collection_view(request):
@@ -251,19 +255,6 @@ def handle_borrow_request_view(request, request_id, action):
 
     borrow_request.save()
     return redirect('book_detail', book_id=borrow_request.book.id) 
-
-@login_required
-def borrow_books_view(request):
-    query = request.GET.get('q', '').strip()
-    if query:
-        books = Book.objects.filter(
-            Q(title__icontains=query) |
-            Q(author__icontains=query) |
-            Q(genre__icontains=query)
-        ).order_by('-created_at')
-    else:
-        books = Book.objects.all().order_by('-created_at')
-    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
 
 @login_required
 def my_books_view(request):
