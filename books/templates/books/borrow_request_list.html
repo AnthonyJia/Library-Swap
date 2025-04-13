@@ -10,6 +10,7 @@
         <th>Requester</th>
         <th>Start Date</th>
         <th>End Date</th>
+        <th>Message</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -22,6 +23,7 @@
             <td>{{ req.requester.username }}</td>
             <td>{{ req.start_date }}</td>
             <td>{{ req.end_date }}</td>
+            <td>{{req.message}}</td>
             <td>{{ req.get_status_display }}</td>
             <td>
               <a href="{% url 'handle_borrow_request' req.id 'accept' %}">Accept</a>
