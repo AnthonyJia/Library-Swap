@@ -16,7 +16,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
 DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['projectb18-63ef789a48c4.herokuapp.com', 'localhost', '127.0.0.1'])
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -63,6 +63,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://projectb18-63ef789a48c4.herokuapp.com",
+    # Add any other domains as needed
 ]
 
 # Authentication Backends
