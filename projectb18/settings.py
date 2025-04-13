@@ -4,7 +4,9 @@ from pathlib import Path
 import environ
 import logging
 import ssl
-ssl._create_default_https_context = ssl._create_unverified_context
+ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -48,7 +50,10 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [os.environ.get("REDIS_URL", "redis://localhost:6379")],
+            "hosts": [{
+                "address": os.environ.get("REDIS_URL", "redis://localhost:6379"),
+                "ssl_context": ssl_context,
+            }],
         },
     },
 }
