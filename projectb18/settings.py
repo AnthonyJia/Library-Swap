@@ -4,6 +4,7 @@ from pathlib import Path
 import environ
 import logging
 import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 #logging.basicConfig(level=logging.DEBUG)
 
