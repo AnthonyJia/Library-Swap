@@ -30,7 +30,7 @@ urlpatterns = [
     path('policies/', lending_policies_view, name='lending_policies'),
     path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
     path('profile/edit/', edit_profile_view, name='edit_profile'),
-    path('chat/', include("chat.urls", namespace='chat')),
+    path('chat/', include("chat.urls")),
     path('request-provider/', request_provider_view, name='request_provider'),
     path('manage-provider-requests/', manage_provider_requests_view, name='manage_provider_requests'),
     path('approve-provider/<int:user_id>/', approve_provider_view, name='approve_provider'),
