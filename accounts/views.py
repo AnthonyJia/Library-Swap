@@ -32,8 +32,8 @@ def choose_view(request):
                 request.user.save()
                 return redirect('provide_page')
             else:
-                messages.error(request, "You do not have permission to be a provider yet. Please request provider status below.")
-                return redirect('request_provider')  # Redirect to a view where they can request provider status.
+                messages.error(request, "You do not have permission to be a provider yet.")
+                #return redirect('request_provider')  # Redirect to a view where they can request provider status.
         elif choice == 'borrower':
             # They want to be a borrower
             request.user.role = 'borrower'
