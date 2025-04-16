@@ -4,8 +4,6 @@ from pathlib import Path
 import environ
 import logging
 
-#logging.basicConfig(level=logging.DEBUG)
-SECURE_SSL_REDIRECT = True
 # Define BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -187,13 +185,16 @@ try:
 except ImportError:
     pass
 
-if not DEBUG:
+# if not DEBUG:
 
-    # HTTP Strict Transport Security (HSTS)
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-    SECURE_HSTS_PRELOAD = True
+#     # HTTP Strict Transport Security (HSTS)
+#     SECURE_SSL_REDIRECT = True
+#     SECURE_HSTS_SECONDS = 31536000  # 1 year
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+#     SECURE_HSTS_PRELOAD = True
 
-    # Cookies only sent via HTTPS
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+#     # Cookies only sent via HTTPS
+#     SESSION_COOKIE_SECURE = True
+#     CSRF_COOKIE_SECURE = True
+# else:
+#     SECURE_SSL_REDIRECT = False
