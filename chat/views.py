@@ -69,4 +69,4 @@ def get_or_create_chatroom(request, username):
         chatroom = ChatGroup.objects.create(is_private = True)
         chatroom.members.add(other_user, request.user)
     
-    return redirect('chat:chatroom', chatroom_name=chatroom.group_name)
+    return redirect('chatroom', chatroom_name=chatroom.group_name)
