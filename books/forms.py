@@ -71,6 +71,13 @@ class CollectionForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Exclude books that are already in a private collection
+        self.fields['books'].queryset = Book.objects.exclude(
+            collection__visibility='private'
+        ).distinct()
+
 class BorrowRequestForm(forms.ModelForm):
     class Meta:
         model = BorrowRequest
