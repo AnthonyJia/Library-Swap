@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
 class Book(models.Model):
@@ -97,6 +98,32 @@ class BorrowRequest(models.Model):
 
     def __str__(self):
         return f"Request by {self.requester} for '{self.book.title}' ({self.status})"
+
+class BorrowerReview(models.Model):
+    """Model to store reviews about borrowers."""
+    borrow_request = models.OneToOneField(
+        BorrowRequest,
+        on_delete=models.CASCADE,
+        related_name='review'
+    )
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='given_reviews'
+    )
+    borrower = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='recieved_reviews'
+    )
+    rating = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)
+        ]
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 class BorrowHistory(models.Model):
     borrower = models.ForeignKey(

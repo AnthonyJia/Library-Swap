@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from .forms import BookForm, CollectionForm, BorrowRequestForm
-from .models import Book, Collection, BorrowRequest, BorrowHistory
+from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm
+from .models import Book, Collection, BorrowRequest, BorrowHistory, BorrowerReview
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -205,6 +205,33 @@ def request_borrow_book(request, book_id):
     })
 
 @login_required
+def review_borrower(request, request_id):
+    borrow_request = get_object_or_404(
+        BorrowRequest,
+        pk=request_id,
+        status='returned',
+        book__user=request.user
+    )
+
+    if hasattr(borrow_request, 'review'):
+        return redirect('list_borrow_request_page')
+    
+    if request.method == 'POST':
+        form = BorrowerReviewForm(request.POST)
+        if form.is_valid():
+            BorrowerReview.objects.create(
+                borrow_request=borrow_request,
+                reviewer=request.user,
+                borrower=borrow_request.requester,
+                rating=form.cleaned_data['rating']
+            )
+            return redirect('list_borrow_request_page')
+    else:
+        form = BorrowerReviewForm()
+    
+    return render(request, 'books/review_form.html', {'form': form, 'br': borrow_request})
+
+@login_required
 def list_my_borrow_request_view(request):
     borrow_requests = BorrowRequest.objects.filter(requester = request.user)
     return render(request, 'books/my_borrow_request_list.html', {'borrow_requests': borrow_requests})
@@ -257,7 +284,10 @@ def handle_borrow_request_view(request, request_id, action):
             entry.save()
 
             borrow_request.book.save()
+            borrow_request.save()
             messages.success(request, "Book marked as returned.")
+
+            return redirect('borrower_review', request_id=borrow_request.id)
 
     else:
         messages.error(request, "Invalid action.")

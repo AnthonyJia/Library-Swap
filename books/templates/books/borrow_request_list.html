@@ -12,6 +12,7 @@
         <th>End Date</th>
         <th>Message</th>
         <th>Status</th>
+        <th>Avg Rating</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -25,6 +26,12 @@
             <td>{{ req.end_date }}</td>
             <td>{{req.message}}</td>
             <td>{{ req.get_status_display }}</td>
+            <td>{% if req.requester.borrower_rating %}
+                  {{ req.requester.borrower_rating }}
+                {% else %}
+                  No rating
+                {% endif %}
+            </td>
             <td>
               <a href="{% url 'handle_borrow_request' req.id 'accept' %}">Accept</a>
               <a href="{% url 'handle_borrow_request' req.id 'decline' %}">Decline</a>
