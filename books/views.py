@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .forms import BookForm, CollectionForm, BorrowRequestForm
-from .models import Book, Collection, BorrowRequest
+from .models import Book, Collection, BorrowRequest, BorrowHistory
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -230,6 +230,7 @@ def handle_borrow_request_view(request, request_id, action):
             borrow_request.approved_at = timezone.now()
             borrow_request.book.current_borrower = borrow_request.requester
             borrow_request.book.save()
+            BorrowHistory.objects.create(borrower=borrow_request.requester, book = borrow_request.book)
             messages.success(request, "Request accepted.")
         else:
             messages.error(request, "Book is currently being borrowed by someone else.")
@@ -246,6 +247,15 @@ def handle_borrow_request_view(request, request_id, action):
         else:
             borrow_request.status = 'returned'
             borrow_request.book.current_borrower = None
+
+            entry = BorrowHistory.objects.filter(
+                borrower=borrow_request.requester,
+                book=borrow_request.book,
+                returned_at__isnull=True
+            ).latest('borrowed_at')
+            entry.returned_at = timezone.now()
+            entry.save()
+
             borrow_request.book.save()
             messages.success(request, "Book marked as returned.")
 
@@ -275,3 +285,7 @@ def delete_book_view(request, book_id):
         return redirect('my_books')
 
     return render(request, 'books/confirm_delete.html', {'book': book})
+
+def borrow_history(request):
+    history = BorrowHistory.objects.filter(borrower = request.user)
+    return render(request, 'books/borrow_history.html', {'history': history})

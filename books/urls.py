@@ -1,21 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import (
-    provide_book_view, 
-    borrow_books_view, 
-    create_collection_view, 
-    list_collection_view, 
-    collection_detail_view, 
-    edit_collection_view, 
-    delete_collection_view, 
-    book_detail,
-    request_borrow_book,
-    list_borrow_request_view,
-    list_my_borrow_request_view,
-    handle_borrow_request_view,
-    my_books_view,
-    delete_book_view,
-)
+from .views import *
 
 urlpatterns = [
     path('provide/', provide_book_view, name='provide_page'),
@@ -32,4 +17,5 @@ urlpatterns = [
     path('borrow_request/<int:request_id>/<str:action>/', handle_borrow_request_view, name='handle_borrow_request'),
     path('my-books/', my_books_view, name='my_books'),
     path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
+    path('history/', borrow_history, name = 'history'),
 ]

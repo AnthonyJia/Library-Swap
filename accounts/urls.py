@@ -37,4 +37,5 @@ urlpatterns = [
     path('borrow/', borrow_view, name='borrow_page'),
     path('my-books/', my_books_view, name='my_books'),
     path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
+
 ]
