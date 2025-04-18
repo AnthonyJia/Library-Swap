@@ -1,40 +1,61 @@
 {% extends "base.html" %}
+
 {% block content %}
+<h2 class="mt-4 mb-3 text-center">Library Swap Dashboard</h2>
 
-  <h2 class="mt-4">What would you like to do?</h2>
-  <form method="POST">
-    {% csrf_token %}
-    <button type="submit" name="choice" value="provider">Provide Books</button>
-    <button type="submit" name="choice" value="borrower">Borrow Books</button>
-  </form>
+<div class="row g-4">
 
-  <!-- Button to create or browse collections and grant provider access -->
-  <div class="d-flex gap-2 mt-3">
-    <form method="GET" action="{% url 'create_collection_page' %}">
-      <button type="submit" class="btn btn-success">Create Collection</button>
-    </form>
-    <form method="GET" action="{% url 'list_collection_page' %}">
-      <button type="submit" class="btn btn-primary">Browse Collections</button>
-    </form>
-    {% if user.is_provider_approved %}
-      <a href="{% url 'manage_provider_requests' %}" class="btn btn-info">Grant Provider Access</a>
-    {% endif %}
-    <!-- Buttons aligned to the right for my books and borrow requests -->
-    <div class="d-flex gap-2 ms-auto">
-      {% if user.role == 'provider' or user.is_provider_approved %}
-        <form method="GET" action="{% url 'my_books' %}">
-          <button type="submit" class="btn btn-outline-info">My Books</button>
-        </form>
-      {% endif %}
-      {% if user.role == 'provider' %}
-        <form method="GET" action="{% url 'list_borrow_request_page' %}">
-          <button type="submit" class="btn btn-outline-warning">Manage Borrow Requests</button>
-        </form>
-      {% endif %}
-      <form method="GET" action="{% url 'list_my_borrow_request_page' %}">
-        <button type="submit" class="btn btn-outline-success">My Borrow Requests</button>
-      </form>
+  <!-- ░░░  B O R R O W  ░░░ -->
+  <div class="col-md-4">
+    <a href="{% url 'borrow_page' %}" class="text-decoration-none">
+      <div class="card bg-dark text-white shadow-sm border-0 d-flex flex-column
+                  justify-content-center align-items-center"
+           style="height:180px;border-radius:.75rem;">
+        <h4 class="fw-bold mb-1">Borrow</h4>
+        <p class="mb-0 small text-center">Browse books and collections.</p>
+      </div>
+    </a>
+
+    <div class="d-flex justify-content-center gap-2 mt-2">
+      <a href="{% url 'borrow_page' %}"          class="btn btn-outline-primary btn-sm">Browse Books</a>
+      <a href="{% url 'list_collection_page' %}" class="btn btn-outline-primary btn-sm">Browse Collections</a>
     </div>
   </div>
 
+  <!-- ░░░  C R E A T E  ░░░ -->
+  <div class="col-md-4">
+    <a href="{% url 'provide_page' %}" class="text-decoration-none">
+      <div class="card bg-dark text-white shadow-sm border-0 d-flex flex-column
+                  justify-content-center align-items-center"
+           style="height:180px;border-radius:.75rem;">
+        <h4 class="fw-bold mb-1">Create</h4>
+        <p class="mb-0 small text-center">Provide books or start a collection.</p>
+      </div>
+    </a>
+
+    <div class="d-flex justify-content-center gap-2 mt-2">
+      <a href="{% url 'provide_page' %}"           class="btn btn-outline-primary btn-sm">Provide Book</a>
+      <a href="{% url 'create_collection_page' %}" class="btn btn-outline-primary btn-sm">Create Collection</a>
+    </div>
+  </div>
+
+  <!-- ░░░  M A N A G E  ░░░ -->
+  <div class="col-md-4">
+    <a href="{% url 'list_borrow_request_page' %}" class="text-decoration-none">
+      <div class="card bg-dark text-white shadow-sm border-0 d-flex flex-column
+                  justify-content-center align-items-center"
+           style="height:180px;border-radius:.75rem;">
+        <h4 class="fw-bold mb-1">Manage</h4>
+        <p class="mb-0 small text-center">Handle requests &amp; your inventory.</p>
+      </div>
+    </a>
+
+    <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
+      <a href="{% url 'list_borrow_request_page' %}"   class="btn btn-outline-primary btn-sm">Requests to Me</a>
+      <a href="{% url 'list_my_borrow_request_page' %}" class="btn btn-outline-primary btn-sm">My Requests</a>
+      <a href="{% url 'my_books' %}"                    class="btn btn-outline-primary btn-sm">My Books</a>
+    </div>
+  </div>
+
+</div>
 {% endblock %}
