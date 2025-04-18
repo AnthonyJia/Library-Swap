@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
             avg=Avg('rating')
         )
         if stats['avg'] is not None:
-            stats['avg'] = round(avg, 2)
+            stats['avg'] = round(stats['avg'], 2)
         return stats['avg']
 
     def save(self, *args, **kwargs):
