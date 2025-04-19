@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
-from .models import Book, Collection, BorrowRequest
+from .models import Book, Collection, BorrowRequest, BorrowerReview
 
 class BookForm(forms.ModelForm):
     class Meta:
@@ -77,6 +77,19 @@ class CollectionForm(forms.ModelForm):
         self.fields['books'].queryset = Book.objects.exclude(
             collection__visibility='private'
         ).distinct()
+
+class BorrowerReviewForm(forms.ModelForm):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
+    rating = forms.ChoiceField(
+        choices=RATING_CHOICES,
+        widget=forms.RadioSelect,
+        label='Rate borrower (1‑5)'
+    )
+
+    class Meta:
+        model = BorrowerReview
+        fields = ['rating'] 
 
 class BorrowRequestForm(forms.ModelForm):
     class Meta:

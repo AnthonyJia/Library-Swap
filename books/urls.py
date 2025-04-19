@@ -30,6 +30,7 @@ urlpatterns = [
     path('borrow_request/list/', list_borrow_request_view, name='list_borrow_request_page'),
     path('borrow_request/my_list/', list_my_borrow_request_view, name='list_my_borrow_request_page'),
     path('borrow_request/<int:request_id>/<str:action>/', handle_borrow_request_view, name='handle_borrow_request'),
+    path('review_borrower/<int:request_id>/', review_borrower, name='borrower_review'),
     path('my-books/', my_books_view, name='my_books'),
     path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
 ]

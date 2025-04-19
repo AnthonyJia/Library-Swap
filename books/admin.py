@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Collection, BorrowRequest
+from .models import Book, Collection, BorrowRequest, BorrowerReview
 # Register your models here.
 
 admin.site.register(Book)
@@ -10,3 +10,4 @@ class CollectionAdmin(admin.ModelAdmin):
     filter_horizontal = ('books', 'allowed_users') 
 
 admin.site.register(BorrowRequest)
+admin.site.register(BorrowerReview)

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Avg
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
@@ -23,6 +24,18 @@ class CustomUser(AbstractUser):
 
     # field to track if a user has requested provider status.
     provider_requested = models.BooleanField(default=False)
+
+    @property
+    def borrower_rating(self):
+        """
+        Returns the user's average rating as a borrower.
+        """
+        stats = self.recieved_reviews.aggregate(
+            avg=Avg('rating')
+        )
+        if stats['avg'] is not None:
+            stats['avg'] = round(stats['avg'], 2)
+        return stats['avg']
 
     def save(self, *args, **kwargs):
         """
