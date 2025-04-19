@@ -3,20 +3,20 @@ import dj_database_url
 from pathlib import Path
 import environ
 import logging
-import ssl
+
+#logging.basicConfig(level=logging.DEBUG)
 
 # Define BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialize django-environ and load .env from BASE_DIR
-env = environ.Env(DEBUG=(bool, True))
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
-DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['projectb18-63ef789a48c4.herokuapp.com', 'localhost', '127.0.0.1'])
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -37,37 +37,24 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'chat',
     'django_htmx',
-    "channels",
 ]
 
 ASGI_APPLICATION = 'projectb18.asgi.application'
 
-DEBUG = env.bool("DEBUG", default=True)
-
 if DEBUG:
-    # No Redis in development: use Django’s in‑memory channel layer
+    # Local development: super‑simple in‑memory channel layer
     CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels.layers.InMemoryChannelLayer",
-        },
+        "default": { "BACKEND": "channels.layers.InMemoryChannelLayer" }
     }
 else:
-    # Production: use your Heroku Redis
+    # Production: pull REDIS_URL from env (you set this on Heroku)
+    REDIS_URL = env("REDIS_URL")
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [{
-                    "address": env("REDIS_URL"),
-                    # disable certificate verification for Heroku’s self‑signed chain
-                    "ssl_cert_reqs": None,
-                }],
-            },
+            "CONFIG": { "hosts": [REDIS_URL] },
         },
     }
-
-ALLOWED_HOSTS = ["projectb18-63ef789a48c4.herokuapp.com", "localhost"]
-CSRF_TRUSTED_ORIGINS = ["https://projectb18-63ef789a48c4.herokuapp.com"]
 
 # Middleware
 MIDDLEWARE = [
@@ -82,11 +69,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django_htmx.middleware.HtmxMiddleware',
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://projectb18-63ef789a48c4.herokuapp.com",
-    # Add any other domains as needed
 ]
 
 # Authentication Backends
@@ -213,17 +195,3 @@ try:
         django_heroku.settings(locals())
 except ImportError:
     pass
-
-# if not DEBUG:
-
-#     # HTTP Strict Transport Security (HSTS)
-#     SECURE_SSL_REDIRECT = True
-#     SECURE_HSTS_SECONDS = 31536000  # 1 year
-#     SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-#     SECURE_HSTS_PRELOAD = True
-
-#     # Cookies only sent via HTTPS
-#     SESSION_COOKIE_SECURE = True
-#     CSRF_COOKIE_SECURE = True
-# else:
-#     SECURE_SSL_REDIRECT = False
