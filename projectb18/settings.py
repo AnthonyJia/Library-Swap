@@ -37,18 +37,37 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'chat',
     'django_htmx',
+    "channels",
 ]
 
 ASGI_APPLICATION = 'projectb18.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [os.environ.get("REDIS_URL", "rediss://:p99ff3982e5577bc63a5024a93d29a96daaa6085863c65b819bcbc28d7ec2a8c9@ec2-52-21-156-131.compute-1.amazonaws.com:31350")],
+DEBUG = env.bool("DEBUG", default=True)
+
+if DEBUG:
+    # No Redis in development: use Django’s in‑memory channel layer
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer",
         },
-    },
-}
+    }
+else:
+    # Production: use your Heroku Redis
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [{
+                    "address": env("REDIS_URL"),
+                    # disable certificate verification for Heroku’s self‑signed chain
+                    "ssl_cert_reqs": None,
+                }],
+            },
+        },
+    }
+
+ALLOWED_HOSTS = ["projectb18-63ef789a48c4.herokuapp.com", "localhost"]
+CSRF_TRUSTED_ORIGINS = ["https://projectb18-63ef789a48c4.herokuapp.com"]
 
 # Middleware
 MIDDLEWARE = [
