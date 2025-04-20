@@ -71,14 +71,10 @@ else:
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [{
-                "address": env("REDIS_URL").replace("redis://", "rediss://"),
-                "ssl": True,
-                "ssl_cert_reqs": ssl.CERT_REQUIRED,
-            }],
+            "hosts": [env("REDIS_URL").replace("redis://", "rediss://")],
+            },
         },
-    },
-}
+    }
 
 
 # Middleware
