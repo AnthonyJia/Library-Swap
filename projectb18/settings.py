@@ -3,6 +3,7 @@ import dj_database_url
 from pathlib import Path
 import environ
 import logging
+import ssl
 
 #logging.basicConfig(level=logging.DEBUG)
 
