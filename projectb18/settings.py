@@ -81,11 +81,9 @@ else:
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [{
-                "host": redis_url.hostname,
-                "port": redis_url.port,
+                "address": (redis_url.hostname, redis_url.port),
                 "password": redis_url.password,
-                "ssl": True,
-                "ssl_cert_reqs": None,
+                "connection_class": SSLConnection,
             }]
         },
     },
