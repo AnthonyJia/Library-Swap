@@ -81,15 +81,15 @@ else:
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [{
-                host="ec2-52-21-156-131.compute-1.amazonaws.com",
-                port=31350,
-                password="p99ff3982e5577bc63a5024a93d29a96daaa6085863c65b819bcbc28d7ec2a8c9",
-                ssl=True,
-                ssl_cert_reqs=None  # temporary for self-signed cert
+                "host": redis_url.hostname,
+                "port": redis_url.port,
+                "password": redis_url.password,
+                "ssl": True,
+                "ssl_cert_reqs": None,
             }]
         },
-    }
     },
+}
 
 
 
