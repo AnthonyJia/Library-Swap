@@ -66,13 +66,13 @@ else:
     REDIS_URL = env("REDIS_URL")  # heroku provides this env var
 
     CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [REDIS_URL.replace("redis://", "rediss://")],
-            },
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [env("REDIS_URL")],  # this already includes rediss://
         },
-    }
+    },
+}
 
 # Middleware
 MIDDLEWARE = [
