@@ -73,11 +73,8 @@ else:
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [{
-                    "address": env("REDIS_URL").replace("redis://", "rediss://"),
-                    "connection_class": SSLConnection,
-                    "ssl_cert_reqs": ssl.CERT_NONE,  # safe for Heroku Redis (self-signed)
-                }],
+                "hosts": [env("REDIS_URL").replace("redis://", "rediss://")],
+                "ssl": True  # only this — let redis-py handle the context
             },
         },
     }
