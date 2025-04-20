@@ -5,18 +5,6 @@ import environ
 import logging
 import ssl
 
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SECURE HSTS_SECONDS = 31536000 # 1 year
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-else:
-    SECURE_SSL_REDIRECT = False
-
 #logging.basicConfig(level=logging.DEBUG)
 
 # Define BASE_DIR
@@ -30,6 +18,18 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+else:
+    SECURE_SSL_REDIRECT = False
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -63,17 +63,23 @@ else:
     # Production: pull REDIS_URL from env (you set this on Heroku)
     REDIS_URL = env("REDIS_URL")
     
+    import ssl
+
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
     CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [{
-                "address": REDIS_URL,
-                "ssl_cert_reqs": ssl.CERT_NONE,
-            }],
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [{
+                    "address": REDIS_URL,
+                    "ssl": ssl_context,
+                }],
+            },
         },
-    },
-}
+    }
 
 # Middleware
 MIDDLEWARE = [
