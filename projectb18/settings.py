@@ -73,7 +73,7 @@ else:
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [redis_connection_factory],
+            "hosts": [redis_connection_factory()],
         },
     }
     }
