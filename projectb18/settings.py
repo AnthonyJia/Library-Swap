@@ -4,6 +4,8 @@ from pathlib import Path
 import environ
 import logging
 import ssl
+import redis
+from redis.asyncio.connection import SSLConnection
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -73,7 +75,11 @@ else:
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL.replace("redis://", "rediss://")],
+            "hosts": [{
+                "address": REDIS_URL.replace("redis://", "rediss://"),
+                "connection_class": SSLConnection,
+                "ssl_cert_reqs": ssl.CERT_NONE,
+            }],
         },
     },
 }
