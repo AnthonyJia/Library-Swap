@@ -6,6 +6,7 @@ import logging
 import ssl
 import redis
 from redis.asyncio.connection import SSLConnection
+from urllib.parse import urlparse
 
 redis_url = os.environ.get("REDIS_TLS_URL") or os.environ.get("REDIS_URL")
 parsed = urlparse(redis_url)
