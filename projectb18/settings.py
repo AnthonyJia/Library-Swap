@@ -3,6 +3,13 @@ import dj_database_url
 from pathlib import Path
 import environ
 import logging
+import ssl
+import redis
+from redis.asyncio.connection import SSLConnection
+from urllib.parse import urlparse
+
+redis_url = os.environ.get("REDIS_TLS_URL") or os.environ.get("REDIS_URL")
+parsed = urlparse(redis_url)
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -17,6 +24,18 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
 DEBUG = env.bool('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+else:
+    SECURE_SSL_REDIRECT = False
 
 # Installed Apps
 INSTALLED_APPS = [
@@ -41,20 +60,31 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = 'projectb18.asgi.application'
 
-if DEBUG:
-    # Local development: super‑simple in‑memory channel layer
-    CHANNEL_LAYERS = {
-        "default": { "BACKEND": "channels.layers.InMemoryChannelLayer" }
-    }
-else:
-    # Production: pull REDIS_URL from env (you set this on Heroku)
-    REDIS_URL = env("REDIS_URL")
+'''if not DEBUG:
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
+    REDIS_TLS_URL = env("REDIS_TLS_URL")
+
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": { "hosts": [REDIS_URL] },
+            "CONFIG": {
+                "hosts": [{
+                    "address": REDIS_TLS_URL,  # loaded only in prod
+                    "ssl": ssl_context,
+                }],
+            },
         },
+    }'''
+CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
     }
+
+
 
 # Middleware
 MIDDLEWARE = [
