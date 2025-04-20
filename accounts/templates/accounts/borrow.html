@@ -1,55 +1,64 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
-  <h2 class="mt-4">Borrow Books</h2>
-  <p>This page is for users who want to borrow books.</p>
-  <div style="text-align: right; font-size: small; margin-bottom: 10px;">
-    Logged in as: {{ request.user.email }}
+<h2 class="mt-4">Borrow Books</h2>
+<p>This page is for users who want to borrow books.</p>
+<div class="text-end small mb-2">
+  Logged in as: {{ request.user.email }}
+</div>
+
+<!-- Search form -->
+<form method="get" action="">
+  <div class="input-group mb-3">
+    <input type="text" name="q" value="{{ query }}" class="form-control"
+           placeholder="Search by title, author, or genre">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
   </div>
+</form>
 
+<!-- List of books -->
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+  {% for book in books %}
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0 book-card">
 
-   <!-- Search form -->
-   <form method="get" action="">
-    <div class="input-group mb-3">
-       <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by title, author, or genre">
-       <button class="btn btn-outline-secondary" type="submit">Search</button>
-    </div>
-   </form>
-
-  <!-- List of books -->
-  <div class="book-list">
-    {% for book in books %}
-      <div class="book-item" style="margin-bottom:20px;">
+        {# --- Book cover --- #}
         {% if book.image %}
-          <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width:200px;">
-        {% endif %}
-        <h3>{{ book.title }}</h3>
-        <p><strong>Author:</strong> {{ book.author }}</p>
-        <p><strong>Genre:</strong> {{ book.genre }}</p>
-        <p><strong>Description:</strong> {{ book.description }}</p>
-        <p><strong>Uploaded by:</strong> {{ book.user.email }}</p>
-        <p><strong>Availability:</strong> {{book.is_available }}</p>
-        
-        {% if user != book.user %}
-
-        <div class="d-flex gap-2">
-          <form method="POST" action="{% url 'request_borrow_book' book.id %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-primary">Request to Borrow</button>
-          </form>
-          <form method="GET" action="{% url 'chat:start-chat' book.user.username %}">
-            <button type="submit" class="btn btn-secondary">Chat with provider</button>
-          </form>
-      </div>
+          <img src="{{ book.image.url }}" class="card-img-top book-cover" alt="{{ book.title }}">
+        {% else %}
+          <img src="{% static 'img/placeholder_cover.png' %}" class="card-img-top book-cover" alt="No cover available">
         {% endif %}
 
-      </div>
-    {% empty %}
-      <p>No books found.</p>
-    {% endfor %}
-  </div>
-  
-  <div class="mt-3 mb-5">
-    <a href="{% url 'choose' %}" class="btn btn-secondary">Back</a>
-  </div>
+        {# --- Meta data --- #}
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-center fw-bold">{{ book.title }}</h5>
 
+          <p class="card-text book-meta mb-1"><strong>Author:</strong> {{ book.author }}</p>
+          <p class="card-text book-meta mb-1"><strong>Genre:</strong> {{ book.genre }}</p>
+          <p class="card-text book-meta mb-1"><strong>Description:</strong> {{ book.description|truncatewords:20 }}</p>
+          <p class="card-text book-meta mb-1"><strong>Uploaded&nbsp;by:</strong> {{ book.uploader_email }}</p>
+
+          <p class="card-text book-meta mb-3">
+            <strong>Availability:</strong>
+            {% if book.is_available %}Available{% else %}Borrowed{% endif %}
+          </p>
+
+          {# --- Action button --- #}
+          <a href="{% url 'request_borrow_book' book.id %}"
+             class="btn btn-primary mt-auto {% if not book.is_available %}disabled{% endif %}">
+            Request to Borrow
+          </a>
+        </div>  {# /card-body #}
+
+      </div>  {# /card #}
+    </div>    {# /col #}
+  {% empty %}
+    <p>No books found.</p>
+  {% endfor %}
+</div>  {# /row #}
+
+<div class="mt-3 mb-5">
+  <a href="{% url 'choose' %}" class="btn btn-secondary">Back</a>
+</div>
 {% endblock %}
