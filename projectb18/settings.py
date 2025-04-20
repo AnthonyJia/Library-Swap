@@ -63,18 +63,11 @@ if DEBUG:
         }
     }
 else:
-    REDIS_URL = env("REDIS_URL")  # heroku provides this env var
-
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
-
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
                 "hosts": [env("REDIS_URL").replace("redis://", "rediss://")],
-                "ssl": True  # only this — let redis-py handle the context
             },
         },
     }
