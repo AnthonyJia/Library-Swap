@@ -60,24 +60,27 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = 'projectb18.asgi.application'
 
-if DEBUG:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels.layers.InMemoryChannelLayer"
-        }
-    }
-else:
-    import ssl
-
-    redis_url = os.environ.get("REDIS_TLS_URL") or os.environ.get("REDIS_URL")
+if not DEBUG:
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
 
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [env("REDIS_URL")],  # Uses full rediss:// URL with embedded credentials
+                "hosts": [{
+                    "address": env("REDIS_TLS_URL"),  # use rediss://...
+                    "ssl": ssl_context,
+                }],
             },
         },
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
     }
 
 
