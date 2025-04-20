@@ -75,18 +75,16 @@ if DEBUG:
         }
     }
 else:
-    redis_url = urlparse(os.getenv('REDIS_URL'))
+    redis_url = os.environ.get("REDIS_TLS_URL") or os.environ.get("REDIS_URL")
+
     CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [{
-                "address": (redis_url.hostname, redis_url.port),
-                "password": redis_url.password,
-                "connection_class": SSLConnection,
-            }]
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": ["rediss://:p99ff3982e5577bc63a5024a93d29a96daaa6085863c65b819bcbc28d7ec2a8c9@ec2-52-21-156-131.compute-1.amazonaws.com:31350"],  # << just pass the full URL string!
+            },
         },
-    },
+    }
 }
 
 
