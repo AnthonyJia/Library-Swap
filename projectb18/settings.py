@@ -69,7 +69,7 @@ else:
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [env("REDIS_URL")],  # this already includes rediss://
+            "hosts": [env("REDIS_URL")],  # this will be rediss://
         },
     },
 }
