@@ -52,19 +52,16 @@ else:
     REDIS_URL = env("REDIS_URL")
     
     CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [
-                    {
-                        "url": REDIS_URL,
-                        # Skip cert verification on Heroku’s self‑signed cert:
-                        "ssl_cert_reqs": ssl.CERT_NONE,
-                    }
-                ],
-            },
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [{
+                "address": REDIS_URL,
+                "ssl_cert_reqs": ssl.CERT_NONE,
+            }],
         },
-    }
+    },
+}
 
 # Middleware
 MIDDLEWARE = [
