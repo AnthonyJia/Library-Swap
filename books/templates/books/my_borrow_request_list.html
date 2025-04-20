@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Pending Requests</h2>
+<h2 class="mt-4">Pending Requests</h2>
 <table>
   <thead>
     <tr>
@@ -78,5 +78,5 @@
     {% endfor %}
   </tbody>
 </table>
-
+<a href="{% url 'choose' %}" class="btn btn-secondary mt-3 mb-5">Back</a>
 {% endblock %}
