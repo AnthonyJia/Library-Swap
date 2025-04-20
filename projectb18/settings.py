@@ -12,12 +12,6 @@ from redis.asyncio.connection import SSLConnection
 # Define BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-def redis_connection_factory():
-    return redis.Redis.from_url(
-        env("REDIS_URL").replace("redis://", "rediss://"),
-        ssl_cert_reqs=ssl.CERT_NONE  # <== This disables verification
-    )
-
 # Initialize django-environ and load .env from BASE_DIR
 env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -70,12 +64,14 @@ if DEBUG:
     }
 else:
     CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [redis_connection_factory()],
-        },
-    }
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [env("REDIS_URL").replace("redis://", "rediss://")],
+                "ssl": True,
+                "ssl_cert_reqs": ssl.CERT_NONE,
+            },
+        }
     }
 
 
