@@ -67,11 +67,19 @@ else:
 
     import ssl
 
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
     CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [env("REDIS_URL").replace("redis://", "rediss://")],
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [{
+                    "address": env("REDIS_URL").replace("redis://", "rediss://"),
+                    "ssl": True,
+                    "ssl_context": ssl_context,
+                }],
             },
         },
     }
