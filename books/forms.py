@@ -64,10 +64,10 @@ class CollectionForm(forms.ModelForm):
             }),
             'visibility': forms.Select(attrs={'class': 'form-control'}),
             'allowed_users': forms.SelectMultiple(attrs={
-                'class': 'form-control select2'
+                'class': 'form-control'
             }),
             'books': forms.SelectMultiple(attrs={
-                'class': 'form-control select2'
+                'class': 'form-control'
             }),
         }
 
