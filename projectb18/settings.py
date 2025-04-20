@@ -13,7 +13,7 @@ from redis.asyncio.connection import SSLConnection
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def redis_connection_factory():
-    return Redis.from_url(
+    return redis.Redis.from_url(
         env("REDIS_URL").replace("redis://", "rediss://"),
         ssl_cert_reqs=ssl.CERT_NONE  # <== This disables verification
     )
