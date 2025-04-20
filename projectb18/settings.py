@@ -49,10 +49,19 @@ if DEBUG:
 else:
     # Production: pull REDIS_URL from env (you set this on Heroku)
     REDIS_URL = env("REDIS_URL")
+    
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": { "hosts": [REDIS_URL] },
+            "CONFIG": {
+                "hosts": [
+                    {
+                        "url": REDIS_URL,
+                        # Skip cert verification on Heroku’s self‑signed cert:
+                        "ssl_cert_reqs": ssl.CERT_NONE,
+                    }
+                ],
+            },
         },
     }
 
