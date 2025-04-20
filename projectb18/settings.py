@@ -67,22 +67,24 @@ else:
     
     import ssl
 
+    from redis.asyncio.connection import SSLConnection
+
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
 
     CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [{
-                "address": REDIS_URL.replace("redis://", "rediss://"),
-                "connection_class": SSLConnection,
-                "ssl_cert_reqs": ssl.CERT_NONE,
-            }],
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [{
+                    "address": REDIS_URL.replace("redis://", "rediss://"),
+                    "connection_class": SSLConnection,
+                    "ssl": ssl_context,
+                }],
+            },
         },
-    },
-}
+    }
 
 # Middleware
 MIDDLEWARE = [
