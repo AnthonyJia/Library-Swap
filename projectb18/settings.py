@@ -11,14 +11,6 @@ from urllib.parse import urlparse
 redis_url = os.environ.get("REDIS_TLS_URL") or os.environ.get("REDIS_URL")
 parsed = urlparse(redis_url)
 
-r = redis.Redis(
-    host="ec2-52-21-156-131.compute-1.amazonaws.com",
-    port=31350,
-    password="p99ff3982e5577bc63a5024a93d29a96daaa6085863c65b819bcbc28d7ec2a8c9",
-    ssl=True,
-    ssl_cert_reqs=None  # temporary for self-signed cert
-)
-
 #logging.basicConfig(level=logging.DEBUG)
 
 # Define BASE_DIR
@@ -83,11 +75,7 @@ else:
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [{
-                    "address": redis_url,
-                    "ssl": True,
-                    "ssl_cert_reqs": ssl.CERT_NONE,  # Skip cert verification (Heroku uses self-signed certs)
-                }],
+                "hosts": [env("REDIS_URL")],  # Uses full rediss:// URL with embedded credentials
             },
         },
     }
