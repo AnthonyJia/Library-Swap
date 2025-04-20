@@ -60,7 +60,7 @@ INSTALLED_APPS = [
 
 ASGI_APPLICATION = 'projectb18.asgi.application'
 
-if not DEBUG:
+'''if not DEBUG:
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
@@ -77,9 +77,8 @@ if not DEBUG:
                 }],
             },
         },
-    }
-else:
-    CHANNEL_LAYERS = {
+    }'''
+CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer"
         }
