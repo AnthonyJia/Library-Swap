@@ -57,31 +57,19 @@ INSTALLED_APPS = [
 ASGI_APPLICATION = 'projectb18.asgi.application'
 
 if DEBUG:
-    # Local development: super‑simple in‑memory channel layer
     CHANNEL_LAYERS = {
-        "default": { "BACKEND": "channels.layers.InMemoryChannelLayer" }
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
     }
 else:
-    # Production: pull REDIS_URL from env (you set this on Heroku)
-    REDIS_URL = env("REDIS_URL")
-    
-    import ssl
-
-    from redis.asyncio.connection import SSLConnection
-
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
+    REDIS_URL = env("REDIS_URL")  # heroku provides this env var
 
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [{
-                    "address": REDIS_URL.replace("redis://", "rediss://"),
-                    "connection_class": SSLConnection,
-                    "ssl": ssl_context,
-                }],
+                "hosts": [REDIS_URL.replace("redis://", "rediss://")],
             },
         },
     }
