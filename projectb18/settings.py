@@ -65,8 +65,6 @@ if DEBUG:
 else:
     REDIS_URL = env("REDIS_URL")  # heroku provides this env var
 
-    import ssl
-
     ssl_context = ssl.create_default_context()
     ssl_context.check_hostname = False
     ssl_context.verify_mode = ssl.CERT_NONE
@@ -77,8 +75,8 @@ else:
             "CONFIG": {
                 "hosts": [{
                     "address": env("REDIS_URL").replace("redis://", "rediss://"),
-                    "ssl": True,
-                    "ssl_context": ssl_context,
+                    "connection_class": SSLConnection,
+                    "ssl_cert_reqs": ssl.CERT_NONE,  # safe for Heroku Redis (self-signed)
                 }],
             },
         },
