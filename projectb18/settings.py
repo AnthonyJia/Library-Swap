@@ -5,6 +5,18 @@ import environ
 import logging
 import ssl
 
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE HSTS_SECONDS = 31536000 # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+else:
+    SECURE_SSL_REDIRECT = False
+
 #logging.basicConfig(level=logging.DEBUG)
 
 # Define BASE_DIR
