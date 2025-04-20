@@ -65,14 +65,21 @@ if DEBUG:
 else:
     REDIS_URL = env("REDIS_URL")  # heroku provides this env var
 
+    import ssl
+
     CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [env("REDIS_URL")],
+            "hosts": [{
+                "address": env("REDIS_URL").replace("redis://", "rediss://"),
+                "ssl": True,
+                "ssl_cert_reqs": ssl.CERT_REQUIRED,
+            }],
         },
     },
 }
+
 
 # Middleware
 MIDDLEWARE = [
