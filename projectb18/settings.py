@@ -70,16 +70,13 @@ else:
     ssl_context.verify_mode = ssl.CERT_NONE
 
     CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [{
-                    "address": REDIS_URL,
-                    "ssl": ssl_context,
-                }],
-            },
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [REDIS_URL.replace("redis://", "rediss://")],
         },
-    }
+    },
+}
 
 # Middleware
 MIDDLEWARE = [
