@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Grant Provider Access</h2>
+  <h2 class="mb-4 text-white">Grant Provider Access</h2>
+
+  <form method="get" class="mb-3">
+    <div class="input-group">
+      <input type="text" name="q" class="form-control" placeholder="Search by username or email" value="{{ query }}">
+      <button class="btn btn-outline-light" type="submit">Search</button>
+    </div>
+  </form>
+
   {% if pending_users %}
     <ul class="list-group">
       {% for user in pending_users %}
@@ -14,6 +22,6 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>No remaining patrons.</p>
+    <p class="text-white">No remaining patrons.</p>
   {% endif %}
 {% endblock %}
