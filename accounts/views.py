@@ -117,15 +117,22 @@ def request_provider_view(request):
 
 @login_required
 def manage_provider_requests_view(request):
-    # Only allow provider-approved users to access this page.
     if not request.user.is_provider_approved:
         messages.error(request, "Access denied.")
         return redirect('choose')
-    
-    # List all users who are not provider approved.
+
+    query = request.GET.get('q', '')
     pending_users = CustomUser.objects.filter(is_provider_approved=False)
-    
-    return render(request, 'accounts/manage_provider_requests.html', {'pending_users': pending_users})
+
+    if query:
+        pending_users = pending_users.filter(
+            Q(username__icontains=query) | Q(email__icontains=query)
+        )
+
+    return render(request, 'accounts/manage_provider_requests.html', {
+        'pending_users': pending_users,
+        'query': query
+    })
 
 @login_required
 def approve_provider_view(request, user_id):
