@@ -17,12 +17,12 @@ parsed = urlparse(redis_url)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialize django-environ and load .env from BASE_DIR
-env = environ.Env(DEBUG=(bool, False))
+env = environ.Env(DEBUG=(bool, True))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
 if not DEBUG:
@@ -39,7 +39,6 @@ else:
 
 # Installed Apps
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,11 +53,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'books.apps.BooksConfig',
     'accounts.apps.AccountsConfig',
-    'chat',
     'django_htmx',
 ]
 
-ASGI_APPLICATION = 'projectb18.asgi.application'
+#ASGI_APPLICATION = 'projectb18.asgi.application'
+WSGI_APPLICATION = 'projectb18.wsgi.application'
 
 '''if not DEBUG:
     ssl_context = ssl.create_default_context()

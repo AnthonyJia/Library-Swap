@@ -49,9 +49,14 @@
              class="btn btn-primary mt-auto {% if not book.is_available %}disabled{% endif %}">
             Request to Borrow
           </a>
-          <form method="GET" action="{% url 'chat:start-chat' book.user.username %}">
-            <button type="submit" class="btn btn-secondary">Chat with Provider</button>
-          </form>
+          <a
+            href="https://outlook.office.com/mail/deeplink/compose?to={{ book.user.email|urlencode }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Email Provider
+          </a>
         </div>  {# /card-body #}
 
       </div>  {# /card #}
