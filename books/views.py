@@ -15,6 +15,9 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def provide_book_view(request):
+    if request.user.role != 'provider':
+        messages.error(request, "Access Denied: You must be an approved provider to access this page.")
+        return redirect('choose')
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
@@ -289,7 +292,7 @@ def handle_borrow_request_view(request, request_id, action):
 @login_required
 def my_books_view(request):
     if not request.user.is_provider_approved:
-        messages.error(request, "Access denied: You must be provider-approved to view your lending books.")
+        messages.error(request, "Access Denied: You must be provider-approved to view your lending books.")
         return redirect('choose')
 
     books = Book.objects.filter(user=request.user).order_by('-created_at')
