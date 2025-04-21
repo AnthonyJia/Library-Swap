@@ -18,8 +18,9 @@
         <h4>{{ book.title }}</h4>
         <p><strong>Author:</strong> {{ book.author }}</p>
         <p><strong>Genre:</strong> {{ book.genre }}</p>
-        <p>{{ book.description }}</p>
+        <p><strong>Description:</strong> {{ book.description }}</p>
         <p><small>Uploaded by: {{ book.user.email }}</small></p>
+        <p><strong>Availability:</strong>{% if book.is_available %} Available{% else %} Borrowed{% endif %}</p>
         
         {% if user != book.user %}
           <div class="d-flex gap-2">
