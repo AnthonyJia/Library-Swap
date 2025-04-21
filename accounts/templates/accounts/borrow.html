@@ -45,13 +45,22 @@
           </p>
 
           {# --- Action button --- #}
-          <a href="{% url 'request_borrow_book' book.id %}"
-             class="btn btn-primary mt-auto {% if not book.is_available %}disabled{% endif %}">
-            Request to Borrow
+          {% if book.user != request.user %}
+            <a href="{% url 'request_borrow_book' book.id %}"
+              class="btn btn-primary mt-auto {% if not book.is_available %}disabled{% endif %}">
+              Request to Borrow
+            </a>
+          <a
+            href="https://outlook.office.com/mail/deeplink/compose?to={{ book.user.email|urlencode }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary"
+          >
+            Email Provider
           </a>
-          <form method="GET" action="{% url 'chat:start-chat' book.user.username %}">
-            <button type="submit" class="btn btn-secondary">Chat with Provider</button>
-          </form>
+          {% else %}
+            <p class="text-muted text-center mt-auto">You uploaded this book. You cannot borrow it.</p>
+          {% endif %}
         </div>  {# /card-body #}
 
       </div>  {# /card #}
