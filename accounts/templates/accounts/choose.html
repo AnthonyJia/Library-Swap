@@ -50,12 +50,19 @@
       </div>
     </a>
 
-    <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
-      <a href="{% url 'list_borrow_request_page' %}"   class="btn btn-outline-primary btn-sm">Requests to Me</a>
+  <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
+    {% if user.role == 'provider' %}
+      <a href="{% url 'list_borrow_request_page' %}" class="btn btn-outline-primary btn-sm">Requests to Me</a>
+    {% endif %}
       <a href="{% url 'list_my_borrow_request_page' %}" class="btn btn-outline-primary btn-sm">My Requests</a>
-      <a href="{% url 'my_books' %}"                    class="btn btn-outline-primary btn-sm">My Books</a>
+    {% if user.role == 'provider' or user.is_provider_approved %}
+      <a href="{% url 'my_books' %}" class="btn btn-outline-primary btn-sm">My Books</a>
+    {% endif %}
+    {% if user.is_provider_approved %}
+      <a href="{% url 'manage_provider_requests' %}" class="btn btn-outline-info btn-sm">Grant Provider Access</a>
+    {% endif %}
     </div>
   </div>
-
+  
 </div>
 {% endblock %}
