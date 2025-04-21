@@ -48,32 +48,27 @@ class CollectionForm(forms.ModelForm):
         labels = {
             'title': 'Collection Title',
             'description': 'Description (Optional)',
-            'visibility': 'Privacy',
-            'allowed_users': 'Allowed Users',
-            'books': 'Books in Collection',
+        }
+        help_texts = {
+            'title': 'Be specific when naming your collection.',
+            'description': 'Add a short description so others know what this collection is for. (Optional)',
         }
         widgets = {
-            'title': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter collection title'
-            }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter description (optional)',
-                'rows': 3
-            }),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'visibility': forms.Select(attrs={'class': 'form-control'}),
             'allowed_users': forms.SelectMultiple(attrs={
-                'class': 'form-control'
+                'class': 'form-control select2',
+                'data-placeholder': 'Select users'
             }),
             'books': forms.SelectMultiple(attrs={
-                'class': 'form-control'
+                'class': 'form-control select2',
+                'data-placeholder': 'Select books'
             }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Exclude books that are already in a private collection
         self.fields['books'].queryset = Book.objects.exclude(
             collection__visibility='private'
         ).distinct()
