@@ -44,6 +44,9 @@ def choose_view(request):
 
 @login_required
 def provide_view(request):
+    if request.user.role != 'provider':
+        messages.error(request, "Access Denied: You must be an approved provider to access this page.")
+        return redirect('choose')
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
