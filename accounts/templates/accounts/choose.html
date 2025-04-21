@@ -2,7 +2,9 @@
 
 {% block content %}
 <h2 class="mt-4 mb-3 text-center">Library Swap Dashboard</h2>
-
+<div class="text-center mb-4">
+  <h4 class="mb-3">What would you like to do?</h4>
+</div>
 <div class="row g-4">
 
   <!-- BORROW TAB -->
@@ -16,7 +18,7 @@
       </div>
     </a>
 
-    <div class="d-flex justify-content-center gap-2 mt-2">
+  <div class="d-flex justify-content-center gap-2 mt-2">
       <a href="{% url 'borrow_page' %}"          class="btn btn-outline-primary btn-sm">Browse Books</a>
       <a href="{% url 'list_collection_page' %}" class="btn btn-outline-primary btn-sm">Browse Collections</a>
     </div>
@@ -34,7 +36,7 @@
     </a>
 
     <div class="d-flex justify-content-center gap-2 mt-2">
-      <a href="{% url 'provide_page' %}"           class="btn btn-outline-primary btn-sm">Provide Book</a>
+      <a href="{% url 'provide_page' %}"           class="btn btn-outline-primary btn-sm">Provide Books</a>
       <a href="{% url 'create_collection_page' %}" class="btn btn-outline-primary btn-sm">Create Collection</a>
     </div>
   </div>
