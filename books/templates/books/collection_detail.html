@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
   <h2>{{ collection.title }}</h2>
-  <p>Visibility: {{ collection.visibility }}</p>
+  <p><strong>Creator:</strong> {{ collection.creator }}</p>
+  <p><strong>Visibility:</strong> {{ collection.visibility }}</p>
+  <p><strong>Description:</strong> {{collection.description }}</p>
   
   {% if collection.creator == request.user %}
     <a href="{% url 'edit_collection' collection.pk %}" class="btn btn-warning">Edit Collection</a>
