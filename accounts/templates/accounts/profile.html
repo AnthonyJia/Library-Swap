@@ -3,18 +3,18 @@
   <h2 class="mt-4">Your Profile</h2>
 
   <!-- Display basic info -->
-  <p>First name: {{ user.first_name }}</p>
-  <p>Last name: {{ user.last_name }}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Date joined: {{ user.date_joined }}</p>
+  <p><strong>First name:</strong> {{ user.first_name }}</p>
+  <p><strong>Last name:</strong> {{ user.last_name }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>Date joined:</strong> {{ user.date_joined }}</p>
   
   <!-- Display new custom fields -->
-  <p>Birthday: {{ user.birthday }}</p>
-  <p>Interests: {{ user.interests }}</p>
-  <p>Description: {{ user.description }}</p>
+  <p><strong>Birthday:</strong> {{ user.birthday }}</p>
+  <p><strong>Interests:</strong> {{ user.interests }}</p>
+  <p><strong>Description:</strong> {{ user.description }}</p>
 
   {% if user.image %}
-    <p>Current Profile Picture:</p>
+    <p><strong>Current Profile Picture:</strong></p>
     <img src="{{ user.image.url }}" alt="Profile Picture" style="max-width:200px;">
   {% else %}
     <p>No profile picture uploaded yet.</p>
