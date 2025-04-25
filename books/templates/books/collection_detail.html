@@ -21,7 +21,7 @@
         <p><strong>Author:</strong> {{ book.author }}</p>
         <p><strong>Genre:</strong> {{ book.genre }}</p>
         <p><strong>Description:</strong> {{ book.description }}</p>
-        <p><small>Uploaded by: {{ book.user.email }}</small></p>
+        <p><strong>Uploaded by:</strong> {{ book.user.username }} {%if user.is_authenticated %} ({{book.uploader_email}}) {% endif %}</p>
         <p><strong>Availability:</strong>{% if book.is_available %} Available{% else %} Borrowed{% endif %}</p>
         
         {% if user != book.user %}
