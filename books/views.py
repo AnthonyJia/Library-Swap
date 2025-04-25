@@ -228,6 +228,7 @@ def review_borrower(request, request_id):
                 borrower=borrow_request.requester,
                 rating=form.cleaned_data['rating']
             )
+            messages.success(request, "Review submitted successfully!")
             return redirect('list_borrow_request_page')
     else:
         form = BorrowerReviewForm()
