@@ -2,6 +2,8 @@ from django import forms
 from django.utils import timezone
 from datetime import timedelta
 from .models import Book, Collection, BorrowRequest, BorrowerReview
+from django.db.models import Q
+
 
 class BookForm(forms.ModelForm):
     class Meta:
@@ -68,10 +70,17 @@ class CollectionForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
         super().__init__(*args, **kwargs)
-        self.fields['books'].queryset = Book.objects.exclude(
-            collection__visibility='private'
-        ).distinct()
+
+        if instance:
+            self.fields['books'].queryset = Book.objects.filter(
+                ~Q(collection__visibility='private') | Q(pk__in=instance.books.values('pk'))
+            ).distinct()
+        else:
+            self.fields['books'].queryset = Book.objects.exclude(
+                collection__visibility='private'
+            ).distinct()
 
 class BorrowerReviewForm(forms.ModelForm):
     RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]

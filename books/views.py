@@ -157,10 +157,10 @@ def edit_collection_view(request, pk):
             updated_collection.save()
             form.save_m2m()
 
-            # If visibility changed from public to private, add creator to allowed_users
-            if old_visibility == 'public' and new_visibility == 'private':
-                updated_collection.allowed_users.add(request.user)
-
+            # If visibility changed from public to private, or remains private, ensure creator is in allowed_users
+            if new_visibility == 'private':
+                updated_collection.allowed_users.add(updated_collection.creator)
+                
             messages.success(request, "Collection updated successfully!")
             return redirect('collection_detail', pk=collection.pk)
         else:
