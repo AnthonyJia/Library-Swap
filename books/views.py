@@ -141,22 +141,33 @@ def collection_detail_view(request, pk):
 @login_required
 def edit_collection_view(request, pk):
     collection = get_object_or_404(Collection, pk=pk)
+
     # Only the creator can edit the collection.
     if collection.creator != request.user:
         messages.error(request, "You do not have permission to edit this collection.")
         return redirect('books/collection_detail', pk=collection.pk)
-    
+
     if request.method == 'POST':
+        old_visibility = collection.visibility  # Save original visibility
         form = CollectionForm(request.POST, instance=collection)
+
         if form.is_valid():
-            form.save()
+            updated_collection = form.save(commit=False)
+            new_visibility = updated_collection.visibility
+            updated_collection.save()
+            form.save_m2m()
+
+            # If visibility changed from public to private, add creator to allowed_users
+            if old_visibility == 'public' and new_visibility == 'private':
+                updated_collection.allowed_users.add(request.user)
+
             messages.success(request, "Collection updated successfully!")
             return redirect('collection_detail', pk=collection.pk)
         else:
             messages.error(request, "Please correct the errors below.")
     else:
         form = CollectionForm(instance=collection)
-    
+
     return render(request, 'books/edit_collection.html', {'form': form, 'collection': collection})
 
 @login_required
