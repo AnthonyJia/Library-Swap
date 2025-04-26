@@ -9,7 +9,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.shortcuts import render
 from django.db.models import Q
-from books.models import Book
+from django.core.paginator import Paginator
+
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +49,16 @@ def borrow_books_view(request):
         )
     
     books = books.order_by('-created_at')
-    return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
+
+    # --- Pagination ---
+    paginator = Paginator(books, 12)  # 12 books per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'accounts/borrow.html', {
+        'page_obj': page_obj,
+        'query': query
+    })
 
 @login_required
 def create_collection_view(request):
