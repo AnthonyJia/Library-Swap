@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from django.db.models import Q
 from django.core.paginator import Paginator
+from .models import Collection
 
 
 logger = logging.getLogger(__name__)
@@ -191,7 +192,7 @@ def delete_collection_view(request, pk):
     if request.method == 'POST':
         collection.delete()
         messages.success(request, "Collection deleted successfully!")
-        return redirect('list_collection_page')  # Or another page, such as a collection list view.
+        return redirect('choose')  # Or another page, such as a collection list view.
     
     return render(request, 'books/delete_collection.html', {'collection': collection})
 
@@ -330,3 +331,14 @@ def delete_book_view(request, book_id):
         return redirect('my_books')
 
     return render(request, 'books/confirm_delete.html', {'book': book})
+
+@login_required
+def list_my_collections_view(request):
+    collections = (
+        Collection.objects
+                  .filter(creator=request.user)
+                  .order_by('-id')
+    )
+    return render(request, 'books/my_collections.html', {
+        'collections': collections
+    })

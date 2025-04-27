@@ -63,6 +63,13 @@
     {% if user.is_provider_approved %}
       <a href="{% url 'manage_provider_requests' %}" class="btn btn-outline-primary btn-sm">Grant Provider Access</a>
     {% endif %}
+
+    {% if user.is_authenticated %}   {# only show to logged-in patrons/providers #}
+      <a href="{% url 'list_my_collections' %}"
+        class="btn btn-outline-primary btn-sm">
+      My Collections
+      </a>
+    {% endif %} 
     </div>
   </div>
   

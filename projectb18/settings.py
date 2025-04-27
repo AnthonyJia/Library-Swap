@@ -22,17 +22,17 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    SECURE_SSL_REDIRECT = False
     SECURE_HSTS_SECONDS = 31536000 # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 else:
     SECURE_SSL_REDIRECT = False
