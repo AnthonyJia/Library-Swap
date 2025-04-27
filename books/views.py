@@ -192,7 +192,7 @@ def delete_collection_view(request, pk):
     if request.method == 'POST':
         collection.delete()
         messages.success(request, "Collection deleted successfully!")
-        return redirect('list_collection_page')  # Or another page, such as a collection list view.
+        return redirect('choose')  # Or another page, such as a collection list view.
     
     return render(request, 'books/delete_collection.html', {'collection': collection})
 
