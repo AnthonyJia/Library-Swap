@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from django.db.models import Q
 from django.core.paginator import Paginator
+from .models import Collection
 
 
 logger = logging.getLogger(__name__)
@@ -330,3 +331,14 @@ def delete_book_view(request, book_id):
         return redirect('my_books')
 
     return render(request, 'books/confirm_delete.html', {'book': book})
+
+@login_required
+def list_my_collections_view(request):
+    collections = (
+        Collection.objects
+                  .filter(creator=request.user)
+                  .order_by('-id')
+    )
+    return render(request, 'books/my_collections.html', {
+        'collections': collections
+    })
