@@ -35,5 +35,5 @@ urlpatterns = [
     path('review_borrower/<int:request_id>/', review_borrower, name='borrower_review'),
     path('my-books/', my_books_view, name='my_books'),
     path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
-    path('collections/my/', list_my_collections_view, name='list_my_collections'),
+    path('collections/my-collections/', list_my_collections_view, name='list_my_collections'),
 ]
