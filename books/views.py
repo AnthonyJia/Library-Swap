@@ -266,7 +266,18 @@ def list_my_borrow_request_view(request):
 @login_required
 def list_borrow_request_view(request):
     borrow_requests = BorrowRequest.objects.all().order_by('-id')
-    return render(request, 'books/borrow_request_list.html', {'borrow_requests': borrow_requests})
+
+    returned_requests = BorrowRequest.objects.filter(
+        status='returned',
+        book__user=request.user,
+        book_review__isnull=True
+    ).order_by('-approved_at')
+
+
+    return render(request, 'books/borrow_request_list.html', {
+        'borrow_requests':   borrow_requests,
+        'returned_requests': returned_requests,
+    })
 
 @login_required
 def handle_borrow_request_view(request, request_id, action):
