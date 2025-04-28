@@ -124,3 +124,23 @@ class BorrowerReview(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+class BookReview(models.Model):
+    # user's review books that are marked as returned
+    borrow_request = models.OneToOneField(
+        'BorrowRequest',
+        on_delete=models.CASCADE,
+        related_name='book_review'
+    )
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='book_reviews'
+    )
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    comment = models.TextField(blank=True, max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.reviewer.username} rated '{self.borrow_request.book.title}' {self.rating}/5"
