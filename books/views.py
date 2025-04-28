@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm
+from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm, BookReviewForm
 from .models import Book, Collection, BorrowRequest, BorrowerReview
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
@@ -353,3 +353,29 @@ def list_my_collections_view(request):
     return render(request, 'books/my_collections.html', {
         'collections': collections
     })
+
+def review_book_view(request, request_id):
+    borrow_request = get_object_or_404(
+        BorrowRequest,
+        pk = request_id,
+        status = 'returned',
+        book__user=request.user,
+        book_review__isnull=True
+    )
+
+    if request.method == 'POST':
+        form = BookReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit = False)
+            review.borrow_request = borrow_request
+            review.reviewer = request.user
+            review.save()
+            messages.success(request, "Book review submitted!")
+            return redirect('list_borrow_request_page')
+        else:
+            form = BookReviewForm()
+        
+        return render (request, 'books/book_review_form.html', {
+            'form': form,
+            'book': borrow_request.book
+        })
