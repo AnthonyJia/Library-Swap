@@ -24,6 +24,8 @@
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
+        {% empty %}
+        <tr><td colspan="5" class="text-center">No pending requests.</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -52,6 +54,8 @@
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
+        {% empty %}
+        <tr><td colspan="5" class="text-center">No approved requests.</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -80,6 +84,8 @@
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
+        {% empty %}
+        <tr><td colspan="5" class="text-center">No declined requests.</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -111,7 +117,7 @@
             </td>
           </tr>
           {% empty %}
-        <tr><td colspan="5" class="text-center">No returned books to review.</td></tr>
+          <tr><td colspan="5" class="text-center">No returned books to review.</td></tr>
       {% endfor %}
     </tbody>
   </table>
