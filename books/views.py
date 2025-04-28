@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm
-from .models import Book, Collection, BorrowRequest, BorrowHistory, BorrowerReview
+from .models import Book, Collection, BorrowRequest, BorrowerReview
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone

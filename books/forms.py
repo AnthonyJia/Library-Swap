@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
-from .models import Book, Collection, BorrowRequest, BorrowerReview
+from .models import Book, Collection, BorrowRequest, BorrowerReview, BookReview
 from django.db.models import Q
 
 
@@ -142,3 +142,14 @@ class BorrowRequestForm(forms.ModelForm):
             max_end_date = start_date + timedelta(days=180)
             if end_date > max_end_date:
                 raise forms.ValidationError("End date cannot be more than 6 months after the start date.")
+            
+class BookReviewForm(forms.ModelForm):
+    class Meta:
+        model = BookReview
+        fields = ['rating','comment']
+        widgets = {
+            'comment': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter a review for this book:'
+            })
+        }
