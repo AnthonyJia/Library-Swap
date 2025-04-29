@@ -13,19 +13,8 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 import logging
 
-from .forms import (
-    BookForm,
-    CollectionForm,
-    BorrowRequestForm,
-    BorrowerReviewForm,
-)
-from .models import (
-    Book,
-    Collection,
-    BorrowRequest,
-    BorrowHistory,
-    BorrowerReview,
-)
+from .forms import *
+from .models import *
 
 logger = logging.getLogger(__name__)
 
