@@ -17,7 +17,7 @@ parsed = urlparse(redis_url)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialize django-environ and load .env from BASE_DIR
-env = environ.Env(DEBUG=(bool, True))
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Security Settings
