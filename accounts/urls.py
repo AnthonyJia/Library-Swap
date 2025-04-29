@@ -15,7 +15,8 @@ from .views import (
     approve_provider_view,
     borrow_view,
     my_books_view,
-    delete_book_view
+    delete_book_view,
+    edit_book_view,
 )
 
 urlpatterns = [
@@ -37,4 +38,5 @@ urlpatterns = [
     path('borrow/', borrow_view, name='borrow_page'),
     path('my-books/', my_books_view, name='my_books'),
     path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
+    path('edit-book/<int:book_id>/', edit_book_view,   name='edit_book'),
 ]
