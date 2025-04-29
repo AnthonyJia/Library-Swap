@@ -68,6 +68,17 @@ class Collection(models.Model):
         help_text="Only for private collections"
     )
 
+    def user_can_access(self, user):
+        """
+        Check if the user can access this collection.
+        Returns True if the collection is public or if the user is allowed in a private collection.
+        """
+        if self.visibility == 'public':
+            return True
+        elif self.visibility == 'private' and user in self.allowed_users.all():
+            return True
+        return False
+
     def __str__(self):
         return f"{self.title} ({self.visibility})"
 
@@ -98,6 +109,30 @@ class BorrowRequest(models.Model):
 
     def __str__(self):
         return f"Request by {self.requester} for '{self.book.title}' ({self.status})"
+
+class CollectionAccessRequest(models.Model):
+    REQUEST_STATUS = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE, related_name='access_requests')
+    requester = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='collection_access_requests')
+    status = models.CharField(max_length=10, choices=REQUEST_STATUS, default='pending')
+    message = models.TextField(blank=True, max_length=500)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+    responded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='handled_collection_requests'
+    )
+
+    def __str__(self):
+        return f"Access request by {self.requester} for '{self.collection.title}' ({self.status})"
 
 class BorrowerReview(models.Model):
     """Model to store reviews about borrowers."""
