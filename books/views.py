@@ -8,7 +8,7 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.core.paginator import Paginator
 from django.utils import timezone
 import logging
@@ -54,7 +54,7 @@ def borrow_books_view(request):
     )
     # exclude them
     books = Book.objects.exclude(uuid__in=private_uuids)
-
+    books = books.annotate(avg_rating=Avg('review__rating'))
     if query:
         books = books.filter(
             Q(title__icontains=query) |
@@ -72,7 +72,6 @@ def borrow_books_view(request):
         'page_obj': page_obj,
         'query': query
     })
-
 
 @login_required
 def create_collection_view(request):
