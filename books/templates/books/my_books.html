@@ -15,7 +15,7 @@
           <p><strong>Description:</strong> {{ book.description }}</p>
           
           <!-- Delete button -->
-          <a href="{% url 'delete_book' book.id %}" class="btn btn-danger btn-sm">Delete Book</a>         
+          <a href="{% url 'delete_book' book.uuid %}" class="btn btn-danger btn-sm">Delete Book</a>         
         </div>
       {% endfor %}
     </div>

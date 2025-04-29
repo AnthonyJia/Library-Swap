@@ -45,7 +45,7 @@
 
           {# --- Action button --- #}
           {% if book.user != request.user %}
-            <a href="{% url 'request_borrow_book' book.id %}"
+            <a href="{% url 'request_borrow_book' book.uuid %}"
               class="btn btn-primary mt-auto {% if not book.is_available %}disabled{% endif %}">
               Request to Borrow
             </a>
