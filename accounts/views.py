@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.db.models import Q
 from books.models import Book
+from django.db.models import Avg
+
 CustomUser = get_user_model()
 
 def home(request):
@@ -155,6 +157,8 @@ def borrow_view(request):
         ).order_by('-created_at')
     else:
         books = Book.objects.all().order_by('-created_at')
+    
+    books = books.annotate(avg_rating=Avg('review__rating'))
     
     return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
 

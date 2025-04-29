@@ -131,10 +131,16 @@ class BookReview(models.Model):
         on_delete=models.CASCADE,
         related_name='book_review'
     )
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name='review',
+        null=True
+    )
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='book_reviews'
+        related_name='book_review_by_user'
     )
     rating = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]

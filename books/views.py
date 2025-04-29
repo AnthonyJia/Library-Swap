@@ -371,6 +371,7 @@ def review_book_view(request, request_id):
             review = form.save(commit = False)
             review.borrow_request = borrow_request
             review.reviewer = request.user
+            review.book = borrow_request.book
             review.save()
             messages.success(request, "Book review submitted!")
             return redirect('list_my_borrow_request_page')
