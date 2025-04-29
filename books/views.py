@@ -2,6 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
+from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm, CollectionAccessRequestForm
+from .models import Book, Collection, BorrowRequest, BorrowHistory, BorrowerReview, CollectionAccessRequest
+import logging
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from django.shortcuts import render
+from django.db.models import Q
 from django.core.paginator import Paginator
 from django.utils import timezone
 import logging
@@ -133,6 +140,8 @@ def create_collection_view(request):
 
 def list_collection_view(request):
     collections = Collection.objects.all()
+    for c in collections:
+        c.can_access = c.visibility == 'public' or request.user in c.allowed_users.all()
     return render(request, 'books/collection_list.html', {'collections': collections})
 
 
@@ -193,6 +202,24 @@ def delete_collection_view(request, pk):
         'collection': collection
     })
 
+@login_required
+def collection_access_request_view(request, pk):
+    collection = get_object_or_404(Collection, pk=pk)
+    if request.method == 'POST':
+        form = CollectionAccessRequestForm(request.POST)
+        if form.is_valid():
+            access_request = form.save(commit=False)
+            access_request.collection = collection
+            access_request.requester = request.user
+            access_request.save()
+            messages.success(request, "Access request submitted successfully!")
+            return redirect('list_collection_page')
+        else:
+            messages.error(request, "There was an error with your request.")
+    else:
+        form = CollectionAccessRequestForm()
+
+    return render(request, 'books/collection_access_request.html', {'form': form, 'collection': collection})
 
 @login_required
 def book_detail(request, book_uuid):
@@ -267,11 +294,19 @@ def list_my_borrow_request_view(request):
 
 @login_required
 def list_borrow_request_view(request):
-    brs = BorrowRequest.objects.all().order_by('-id')
-    return render(request, 'books/borrow_request_list.html', {
-        'borrow_requests': brs
-    })
+    borrow_requests = BorrowRequest.objects.all().order_by('-id')
+    return render(request, 'books/borrow_request_list.html', {'borrow_requests': borrow_requests})
 
+@login_required
+def list_my_collection_request_view(request):
+    collection_requests = CollectionAccessRequest.objects.filter(requester = request.user).order_by('-id')
+    return render(request, 'books/my_collection_request_list.html', {'collection_requests': collection_requests})
+
+
+@login_required
+def list_collection_request_view(request):
+    collection_requests = CollectionAccessRequest.objects.all().order_by('-id')
+    return render(request, 'books/collection_request_list.html', {'collection_requests': collection_requests})
 
 @login_required
 def handle_borrow_request_view(request, request_id, action):
@@ -314,6 +349,35 @@ def handle_borrow_request_view(request, request_id, action):
 
     br.save()
     return redirect('book_detail', book_uuid=br.book.uuid)
+
+    br.save()
+    return redirect('book_detail', book_id=br.book.id) 
+
+@login_required
+def handle_collection_access_request_view(request, request_id, action):
+    collection_request = get_object_or_404(CollectionAccessRequest, pk=request_id)
+
+    if not request.user == collection_request.collection.creator:
+        messages.error(request, "You don't have permission to perform this action.")
+        return redirect('choose')
+    
+    if action == 'accept':
+        collection_request.status = 'approved'
+        collection_request.responded_by = request.user
+        collection_request.approved_at = timezone.now()
+        collection_request.collection.allowed_users.add(collection_request.requester)
+        messages.success(request, "Collection access request accepted.")
+    elif action == 'decline':
+        collection_request.status = 'rejected'
+        collection_request.responded_by = request.user
+        collection_request.approved_at = timezone.now()
+        messages.success(request, "Collection access request declined.")
+    else:
+        messages.error(request, "Invalid action.")
+        return redirect('choose')
+    
+    collection_request.save()
+    return redirect('list_collection_request_page')
 
 
 @login_required

@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
-from .models import Book, Collection, BorrowRequest, BorrowerReview
+from .models import Book, Collection, BorrowRequest, BorrowerReview, CollectionAccessRequest
 from django.db.models import Q
 
 
@@ -154,3 +154,18 @@ class BorrowRequestForm(forms.ModelForm):
             max_end_date = start_date + timedelta(days=180)
             if end_date > max_end_date:
                 raise forms.ValidationError("End date cannot be more than 6 months after the start date.")
+
+class CollectionAccessRequestForm(forms.ModelForm):
+    class Meta:
+        model = CollectionAccessRequest
+        fields = ['message']
+        labels = {
+            'message': 'Message (Optional)'
+        }
+        widgets = {
+            'message': forms.Textarea(attrs={
+                'maxlength': '500',
+                'class': 'form-control',
+                'placeholder': 'Why do you want to access this collection?'
+            }),
+        }
