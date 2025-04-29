@@ -209,7 +209,7 @@ def collection_access_request_view(request, pk):
             access_request.requester = request.user
             access_request.save()
             messages.success(request, "Access request submitted successfully!")
-            return redirect('collection_detail', pk=collection.pk)
+            return redirect('list_collection_page')
         else:
             messages.error(request, "There was an error with your request.")
     else:
