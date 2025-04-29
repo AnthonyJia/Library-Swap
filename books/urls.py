@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import review_borrower
 from .views import *
 
 urlpatterns = [
@@ -25,4 +24,5 @@ urlpatterns = [
     path('review_borrower/<int:request_id>/', views.review_borrower, name='borrower_review'),
     path('my-books/', views.my_books_view, name='my_books'),
     path('borrow/<int:request_id>/review-book/', review_book_view, name='review_book'),
+    path('books/<uuid:book_uuid>/reviews/', views.book_reviews_list, name='book_reviews_list'),
 ]

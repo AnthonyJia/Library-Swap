@@ -53,6 +53,10 @@
           <p class="card-text book-meta mb-3"><strong>Location:</strong> {{ book.location }}</p>
 
           {# --- Action button --- #}
+          <a href="{% url 'book_reviews_list' book.uuid %}"
+              class="btn btn-primary mt-auto">
+              View reviews
+          </a>
           {% if book.user != request.user %}
             <a href="{% url 'request_borrow_book' book.uuid %}"
               class="btn btn-primary mt-auto {% if not book.is_available %}disabled{% endif %}">
@@ -71,6 +75,7 @@
           {% else %}
             <p class="text-muted text-center mt-auto">You uploaded this book. You cannot borrow it.</p>
           {% endif %}
+          
         </div>  {# /card-body #}
 
       </div>  {# /card #}

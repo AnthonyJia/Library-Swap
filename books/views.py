@@ -432,3 +432,11 @@ def review_book_view(request, request_id):
         'form': form,
         'book': borrow_request.book
     })
+
+def book_reviews_list(request, book_uuid):
+    book = get_object_or_404(Book, uuid = book_uuid)
+    reviews = BookReview.objects.filter(book=book).order_by('-created_at')
+    return render(request, 'books/book_reviews_list.html', {
+        'book': book,
+        'reviews': reviews
+    })
