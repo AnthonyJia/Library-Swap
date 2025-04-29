@@ -192,7 +192,7 @@ def delete_collection_view(request, pk):
     if request.method == 'POST':
         collection.delete()
         messages.success(request, "Collection deleted successfully!")
-        return redirect('list_collection_page')  # Or another page, such as a collection list view.
+        return redirect('choose')  # Or another page, such as a collection list view.
     
     return render(request, 'books/delete_collection.html', {'collection': collection})
 
@@ -259,13 +259,13 @@ def review_borrower(request, request_id):
 
 @login_required
 def list_my_borrow_request_view(request):
-    borrow_requests = BorrowRequest.objects.filter(requester = request.user)
+    borrow_requests = BorrowRequest.objects.filter(requester = request.user).order_by('-id')
     return render(request, 'books/my_borrow_request_list.html', {'borrow_requests': borrow_requests})
 
 
 @login_required
 def list_borrow_request_view(request):
-    borrow_requests = BorrowRequest.objects.all()
+    borrow_requests = BorrowRequest.objects.all().order_by('-id')
     return render(request, 'books/borrow_request_list.html', {'borrow_requests': borrow_requests})
 
 @login_required
