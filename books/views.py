@@ -2,30 +2,19 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
-from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm, CollectionAccessRequestForm
-from .models import Book, Collection, BorrowRequest, BorrowHistory, BorrowerReview, CollectionAccessRequest
+from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm, CollectionAccessRequestForm, BookReviewForm
+from .models import Book, Collection, BorrowRequest, BorrowerReview, CollectionAccessRequest
 import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.core.paginator import Paginator
 from django.utils import timezone
 import logging
 
-from .forms import (
-    BookForm,
-    CollectionForm,
-    BorrowRequestForm,
-    BorrowerReviewForm,
-)
-from .models import (
-    Book,
-    Collection,
-    BorrowRequest,
-    BorrowHistory,
-    BorrowerReview,
-)
+from .forms import *
+from .models import *
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +54,7 @@ def borrow_books_view(request):
     )
     # exclude them
     books = Book.objects.exclude(uuid__in=private_uuids)
-
+    books = books.annotate(avg_rating=Avg('review__rating'))
     if query:
         books = books.filter(
             Q(title__icontains=query) |
@@ -83,7 +72,6 @@ def borrow_books_view(request):
         'page_obj': page_obj,
         'query': query
     })
-
 
 @login_required
 def create_collection_view(request):
@@ -287,9 +275,19 @@ def review_borrower(request, request_id):
 @login_required
 def list_my_borrow_request_view(request):
     brs = BorrowRequest.objects.filter(requester=request.user).order_by('-id')
+    
+    returned_requests = BorrowRequest.objects.all().filter(
+        status='returned',
+        requester=request.user,
+        book_review__isnull=True
+    ).order_by('-approved_at')
+
     return render(request, 'books/my_borrow_request_list.html', {
+        
         'borrow_requests': brs
-    })
+    ,
+        'returned_requests': returned_requests
+})
 
 
 @login_required
@@ -406,4 +404,39 @@ def list_my_collections_view(request):
     cols = Collection.objects.filter(creator=request.user).order_by('-id')
     return render(request, 'books/my_collections.html', {
         'collections': cols
+    })
+
+def review_book_view(request, request_id):
+    borrow_request = get_object_or_404(
+        BorrowRequest,
+        id = request_id,
+        status = 'returned',
+        requester=request.user,
+        book_review__isnull=True
+    )
+
+    if request.method == 'POST':
+        form = BookReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit = False)
+            review.borrow_request = borrow_request
+            review.reviewer = request.user
+            review.book = borrow_request.book
+            review.save()
+            messages.success(request, "Book review submitted!")
+            return redirect('list_my_borrow_request_page')
+    else:
+        form = BookReviewForm()
+        
+    return render (request, 'books/book_review_form.html', {
+        'form': form,
+        'book': borrow_request.book
+    })
+
+def book_reviews_list(request, book_uuid):
+    book = get_object_or_404(Book, uuid = book_uuid)
+    reviews = BookReview.objects.filter(book=book).order_by('-created_at')
+    return render(request, 'books/book_reviews_list.html', {
+        'book': book,
+        'reviews': reviews
     })

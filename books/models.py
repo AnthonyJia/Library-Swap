@@ -174,22 +174,29 @@ class BorrowerReview(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
-class BorrowHistory(models.Model):
-    borrower = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+class BookReview(models.Model):
+    # user's review books that are marked as returned
+    borrow_request = models.OneToOneField(
+        'BorrowRequest',
         on_delete=models.CASCADE,
-        related_name='borrow_history'
+        related_name='book_review'
     )
     book = models.ForeignKey(
         Book,
         on_delete=models.CASCADE,
-        related_name="history_entries"
+        related_name='review',
+        null=True
     )
-    borrowed_at = models.DateTimeField(auto_now_add=True)
-    returned_at = models.DateTimeField(null=True, blank=True)
-
-    class Meta:
-        ordering = ['-borrowed_at']
+    reviewer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='book_review_by_user'
+    )
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    comment = models.TextField(blank=True, max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.borrower.username} borrowed '{self.book.title}' on {self.borrowed_at:%Y-%m-%d}"
+        return f"{self.reviewer.username} rated '{self.borrow_request.book.title}' {self.rating}/5"

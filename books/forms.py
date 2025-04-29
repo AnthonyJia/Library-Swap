@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
-from .models import Book, Collection, BorrowRequest, BorrowerReview, CollectionAccessRequest
+from .models import Book, Collection, BorrowRequest, BorrowerReview, CollectionAccessRequest, BookReview
 from django.db.models import Q
 
 
@@ -167,5 +167,25 @@ class CollectionAccessRequestForm(forms.ModelForm):
                 'maxlength': '500',
                 'class': 'form-control',
                 'placeholder': 'Why do you want to access this collection?'
+            }),
+        }
+            
+class BookReviewForm(forms.ModelForm):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
+    rating = forms.ChoiceField(
+        choices=RATING_CHOICES,
+        widget=forms.RadioSelect,
+        label='Rate borrower (1‑5)'
+    )
+
+    class Meta:
+        model = BookReview
+        fields = ['rating','comment']
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'maxlength': '500', 
+                'class': 'form-control',
+                'placeholder': 'Enter a review for this book:'
             }),
         }
