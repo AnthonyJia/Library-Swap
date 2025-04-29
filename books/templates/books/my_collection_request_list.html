@@ -6,23 +6,17 @@
   <table class="table table-striped table-bordered align-middle">
     <thead class="table-light">
       <tr>
-        <th>Book</th>
+        <th>Collection</th>
         <th>Owner</th>
-        <th>Location</th>
-        <th>Start Date</th>
-        <th>End Date</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      {% for req in borrow_requests %}
+      {% for req in collection_requests %}
         {% if req.status == 'pending' %}
           <tr>
-            <td>{{ req.book.title }}</td>
-            <td>{{ req.book.user.username }}</td>
-            <td>{{ req.book.location }}</td>
-            <td>{{ req.start_date }}</td>
-            <td>{{ req.end_date }}</td>
+            <td>{{ req.collection.title }}</td>
+            <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
@@ -36,23 +30,17 @@
   <table class="table table-striped table-bordered align-middle">
     <thead class="table-light">
       <tr>
-        <th>Book</th>
+        <th>Collection</th>
         <th>Owner</th>
-        <th>Location</th>
-        <th>Start Date</th>
-        <th>End Date</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      {% for req in borrow_requests %}
+      {% for req in collection_requests %}
         {% if req.status == 'approved' %}
           <tr>
-            <td>{{ req.book.title }}</td>
-            <td>{{ req.book.user.username }}</td>
-            <td>{{req.book.location }}</td>
-            <td>{{ req.start_date }}</td>
-            <td>{{ req.end_date }}</td>
+            <td>{{ req.collection.title }}</td>
+            <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
@@ -66,23 +54,17 @@
   <table class="table table-striped table-bordered align-middle">
     <thead class="table-light">
       <tr>
-        <th>Book</th>
+        <th>Collection</th>
         <th>Owner</th>
-        <th>Location</th>
-        <th>Start Date</th>
-        <th>End Date</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      {% for req in borrow_requests %}
+      {% for req in collection_requests %}
         {% if req.status == 'rejected' %}
           <tr>
-            <td>{{ req.book.title }}</td>
-            <td>{{ req.book.user.username }}</td>
-            <td>{{ req.book.location }}</td>
-            <td>{{ req.start_date }}</td>
-            <td>{{ req.end_date }}</td>
+            <td>{{ req.collection.title }}</td>
+            <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}

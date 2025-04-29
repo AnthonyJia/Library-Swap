@@ -1,14 +1,14 @@
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
-from .models import Book, Collection, BorrowRequest, BorrowerReview
+from .models import Book, Collection, BorrowRequest, BorrowerReview, CollectionAccessRequest
 from django.db.models import Q
 
 
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'author', 'genre', 'description', 'image']
+        fields = ['title', 'author', 'genre', 'description', 'image', 'location']
         labels = {
             'description': 'Description (Optional)',
         }
@@ -33,6 +33,9 @@ class BookForm(forms.ModelForm):
             'image': forms.ClearableFileInput(attrs={
                 'class': 'form-control'
             }),
+            'location': forms.Select(attrs={
+                'class': 'form-control form-select'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -42,6 +45,15 @@ class BookForm(forms.ModelForm):
         self.fields['genre'].required = True
         self.fields['image'].required = True
         self.fields['description'].required = False
+        self.fields['location'].required = True
+
+        # Insert the placeholder option at the top
+        self.fields['location'].choices = [('', '-- Select a location --')] + list(self.fields['location'].choices)
+
+        # Clear any default pre-selection (like 'TBD')
+        self.fields['location'].initial = ''
+
+
 
 class CollectionForm(forms.ModelForm):
     class Meta:
@@ -142,3 +154,18 @@ class BorrowRequestForm(forms.ModelForm):
             max_end_date = start_date + timedelta(days=180)
             if end_date > max_end_date:
                 raise forms.ValidationError("End date cannot be more than 6 months after the start date.")
+
+class CollectionAccessRequestForm(forms.ModelForm):
+    class Meta:
+        model = CollectionAccessRequest
+        fields = ['message']
+        labels = {
+            'message': 'Message (Optional)'
+        }
+        widgets = {
+            'message': forms.Textarea(attrs={
+                'maxlength': '500',
+                'class': 'form-control',
+                'placeholder': 'Why do you want to access this collection?'
+            }),
+        }
