@@ -7,6 +7,11 @@
         <a href="{% url 'collection_detail' collection.pk %}">
           <strong>{{ collection.title }}</strong> — {{ collection.visibility }}
         </a>
+        {% if not collection.can_access %}
+            <a href="{% url 'collection_access_request' collection.pk %}" class="btn btn-primary btn-sm float-end">
+              Request Access
+            </a>
+        {% endif %}
       </li>
     {% empty %}
       <li class="list-group-item">No collections found.</li>

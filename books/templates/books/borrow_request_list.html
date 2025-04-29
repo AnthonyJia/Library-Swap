@@ -9,6 +9,7 @@
         <tr>
           <th>Book</th>
           <th>Requester</th>
+          <th>Location</th>
           <th>Start Date</th>
           <th>End Date</th>
           <th>Message</th>
@@ -23,6 +24,7 @@
             <tr>
               <td>{{ req.book.title }}</td>
               <td>{{ req.requester.username }}</td>
+              <td>{{ req.book.location }}</td>
               <td>{{ req.start_date }}</td>
               <td>{{ req.end_date }}</td>
               <td>{{ req.message }}</td>
@@ -52,6 +54,7 @@
         <tr>
           <th>Book</th>
           <th>Requester</th>
+          <th>Location</th>
           <th>Start Date</th>
           <th>End Date</th>
           <th>Status</th>
@@ -64,6 +67,7 @@
             <tr>
               <td>{{ req.book.title }}</td>
               <td>{{ req.requester.username }}</td>
+              <td>{{ req.book.location }}</td>
               <td>{{ req.start_date }}</td>
               <td>{{ req.end_date }}</td>
               <td>{{ req.get_status_display }}</td>
