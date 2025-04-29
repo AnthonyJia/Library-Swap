@@ -16,7 +16,7 @@
         {% if req.status == 'pending' %}
           <tr>
             <td>{{ req.collection.title }}</td>
-            <td>{{ req.collection.user.username }}</td>
+            <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
@@ -40,7 +40,7 @@
         {% if req.status == 'approved' %}
           <tr>
             <td>{{ req.collection.title }}</td>
-            <td>{{ req.collection.user.username }}</td>
+            <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
@@ -64,7 +64,7 @@
         {% if req.status == 'rejected' %}
           <tr>
             <td>{{ req.collection.title }}</td>
-            <td>{{ req.collection.user.username }}</td>
+            <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
         {% endif %}
