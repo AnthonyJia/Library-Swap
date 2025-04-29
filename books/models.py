@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -5,6 +6,17 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
 class Book(models.Model):
+    LOCATION_CHOICES = [
+        ('Brown Library', 'Brown Library'), 
+        ('Clemons Library', 'Clemons Library'), 
+        ('Fine Arts Library', 'Fine Arts Library'), 
+        ('Harrison/Small Library', 'Harrison/Small Library'), 
+        ('Music Library', 'Music Library'), 
+        ('Shannon Library', 'Shannon Library'), 
+        ('TBD', 'TBD')
+    ]
+
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, null=False, unique=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -18,14 +30,18 @@ class Book(models.Model):
     image = models.ImageField(upload_to='book_covers/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     current_borrower = models.ForeignKey(
-    settings.AUTH_USER_MODEL,
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-    related_name='borrowed_books',
-    help_text="User who currently has this book borrowed"
-)
-
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='borrowed_books',
+        help_text="User who currently has this book borrowed"
+        )
+    location = models.CharField(
+        max_length=25, 
+        choices=LOCATION_CHOICES,
+        default='TBD'
+    )
 
     def save(self, *args, **kwargs):
         # Automatically set uploader_email if not already set and user exists.
@@ -35,13 +51,13 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     def is_available(self):
         """
         Returns True if the book is available (i.e., no current borrower).
         """
         return self.current_borrower is None
-    
+
 class Collection(models.Model):
     PRIVACY_CHOICES = [
         ('public', 'Public'),
@@ -52,14 +68,14 @@ class Collection(models.Model):
     description = models.TextField(blank=True)
     books = models.ManyToManyField(Book)
     visibility = models.CharField(
-        max_length=7,  
+        max_length=7,
         choices=PRIVACY_CHOICES,
         default='public',
     )
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE, 
-        related_name='collections' 
+        on_delete=models.CASCADE,
+        related_name='collections'
     )
     allowed_users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -81,7 +97,6 @@ class Collection(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.visibility})"
-
 
 class BorrowRequest(models.Model):
     REQUEST_STATUS = [
@@ -159,22 +174,19 @@ class BorrowerReview(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
-
 class BorrowHistory(models.Model):
     borrower = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete = models.CASCADE,
-        related_name = 'borrow_history'
+        on_delete=models.CASCADE,
+        related_name='borrow_history'
     )
-
     book = models.ForeignKey(
         Book,
-        on_delete = models.CASCADE,
-        related_name = "history_entries"
+        on_delete=models.CASCADE,
+        related_name="history_entries"
     )
-
-    borrowed_at = models.DateTimeField(auto_now_add = True)
-    returned_at = models.DateTimeField(null = True, blank = True)
+    borrowed_at = models.DateTimeField(auto_now_add=True)
+    returned_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-borrowed_at']
