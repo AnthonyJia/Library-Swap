@@ -17,12 +17,12 @@ parsed = urlparse(redis_url)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialize django-environ and load .env from BASE_DIR
-env = environ.Env(DEBUG=(bool, True))
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Security Settings
 SECRET_KEY = env('SECRET_KEY', default='fallback-dev-key')
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.herokuapp.com', 'localhost', '127.0.0.1'])
 
 if not DEBUG:
@@ -153,7 +153,7 @@ DATABASES = {
 
 # django-allauth settings
 # site id = 8 for heroku!
-SITE_ID = 9
+SITE_ID = 8
 SOCIALACCOUNT_ADAPTER = "projectb18.adapters.MySocialAccountAdapter"
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ASSOCIATE_BY_EMAIL = True

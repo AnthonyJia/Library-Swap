@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.db.models import Q
 from books.models import Book
+from django.db.models import Avg
+
 CustomUser = get_user_model()
 
 def home(request):
@@ -156,6 +158,8 @@ def borrow_view(request):
     else:
         books = Book.objects.all().order_by('-created_at')
     
+    books = books.annotate(avg_rating=Avg('review__rating'))
+    
     return render(request, 'accounts/borrow.html', {'books': books, 'query': query})
 
 @login_required
@@ -177,3 +181,22 @@ def delete_book_view(request, book_id):
         return redirect('my_books')
 
     return render(request, 'books/confirm_delete.html', {'book': book})
+
+@login_required
+def edit_book_view(request, book_id):
+    # only the owner should be able to edit
+    book = get_object_or_404(Book, id=book_id, user=request.user)
+
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Book updated successfully.")
+            return redirect('my_books')
+    else:
+        form = BookForm(instance=book)
+
+    return render(request, 'books/edit_book.html', {
+        'form': form,
+        'book': book
+    })

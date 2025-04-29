@@ -33,19 +33,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='BorrowHistory',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('borrowed_at', models.DateTimeField(auto_now_add=True)),
-                ('returned_at', models.DateTimeField(blank=True, null=True)),
-                ('book', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='history_entries', to='books.book')),
-                ('borrower', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='borrow_history', to=settings.AUTH_USER_MODEL)),
-            ],
-            options={
-                'ordering': ['-borrowed_at'],
-            },
-        ),
-        migrations.CreateModel(
             name='BorrowRequest',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -69,6 +56,18 @@ class Migration(migrations.Migration):
                 ('borrower', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recieved_reviews', to=settings.AUTH_USER_MODEL)),
                 ('reviewer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='given_reviews', to=settings.AUTH_USER_MODEL)),
                 ('borrow_request', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='review', to='books.borrowrequest')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='BookReview',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('rating', models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)])),
+                ('comment', models.TextField(blank=True, max_length=1000)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('book', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='review', to='books.book')),
+                ('reviewer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='book_review_by_user', to=settings.AUTH_USER_MODEL)),
+                ('borrow_request', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='book_review', to='books.borrowrequest')),
             ],
         ),
         migrations.CreateModel(
