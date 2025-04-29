@@ -5,6 +5,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
 class Book(models.Model):
+    LOCATION_CHOICES = [
+        ('Brown Library', 'Brown Library'), 
+        ('Clemons Library', 'Clemons Library'), 
+        ('Fine Arts Library', 'Fine Arts Library'), 
+        ('Harrison/Small Library', 'Harrison/Small Library'), 
+        ('Music Library', 'Music Library'), 
+        ('Shannon Library', 'Shannon Library'), 
+        ('TBD', 'TBD')
+    ]
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -24,7 +34,12 @@ class Book(models.Model):
     on_delete=models.SET_NULL,
     related_name='borrowed_books',
     help_text="User who currently has this book borrowed"
-)
+    )
+    location = models.CharField(
+        max_length=25, 
+        choices=LOCATION_CHOICES,
+        default='TBD'
+    )
 
 
     def save(self, *args, **kwargs):
