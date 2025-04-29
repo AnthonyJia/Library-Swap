@@ -18,8 +18,6 @@
             {% if book.is_available %}Available{% else %}Borrowed{% endif %}
           </p>
           <p><strong>Location:</strong> {{ book.location }}</p>
-
-          
           <!-- Delete button -->
           <a href="{% url 'delete_book' book.uuid %}" class="btn btn-danger btn-sm">Delete Book</a>
           <!-- Edit button -->
