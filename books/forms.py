@@ -8,7 +8,7 @@ from django.db.models import Q
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'author', 'genre', 'description', 'image']
+        fields = ['title', 'author', 'genre', 'description', 'image', 'location']
         labels = {
             'description': 'Description (Optional)',
         }
@@ -33,6 +33,9 @@ class BookForm(forms.ModelForm):
             'image': forms.ClearableFileInput(attrs={
                 'class': 'form-control'
             }),
+            'location': forms.Select(attrs={
+                'class': 'form-control form-select'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -42,6 +45,15 @@ class BookForm(forms.ModelForm):
         self.fields['genre'].required = True
         self.fields['image'].required = True
         self.fields['description'].required = False
+        self.fields['location'].required = True
+
+        # Insert the placeholder option at the top
+        self.fields['location'].choices = [('', '-- Select a location --')] + list(self.fields['location'].choices)
+
+        # Clear any default pre-selection (like 'TBD')
+        self.fields['location'].initial = ''
+
+
 
 class CollectionForm(forms.ModelForm):
     class Meta:
