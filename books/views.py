@@ -260,23 +260,25 @@ def review_borrower(request, request_id):
 @login_required
 def list_my_borrow_request_view(request):
     borrow_requests = BorrowRequest.objects.filter(requester = request.user).order_by('-id')
-    return render(request, 'books/my_borrow_request_list.html', {'borrow_requests': borrow_requests})
+    
+    returned_requests = BorrowRequest.objects.all().filter(
+        status='returned',
+        requester=request.user,
+        book_review__isnull=True
+    ).order_by('-approved_at')
+
+    return render(request, 'books/my_borrow_request_list.html', {
+        'borrow_requests': borrow_requests,
+        'returned_requests': returned_requests
+})
 
 
 @login_required
 def list_borrow_request_view(request):
     borrow_requests = BorrowRequest.objects.all().order_by('-id')
 
-    returned_requests = BorrowRequest.objects.filter(
-        status='returned',
-        book__user=request.user,
-        book_review__isnull=True
-    ).order_by('-approved_at')
-
-
     return render(request, 'books/borrow_request_list.html', {
         'borrow_requests':   borrow_requests,
-        'returned_requests': returned_requests,
     })
 
 @login_required
@@ -357,9 +359,9 @@ def list_my_collections_view(request):
 def review_book_view(request, request_id):
     borrow_request = get_object_or_404(
         BorrowRequest,
-        pk = request_id,
+        id = request_id,
         status = 'returned',
-        book__user=request.user,
+        requester=request.user,
         book_review__isnull=True
     )
 
@@ -371,11 +373,11 @@ def review_book_view(request, request_id):
             review.reviewer = request.user
             review.save()
             messages.success(request, "Book review submitted!")
-            return redirect('list_borrow_request_page')
-        else:
-            form = BookReviewForm()
+            return redirect('list_my_borrow_request_page')
+    else:
+        form = BookReviewForm()
         
-        return render (request, 'books/book_review_form.html', {
-            'form': form,
-            'book': borrow_request.book
-        })
+    return render (request, 'books/book_review_form.html', {
+        'form': form,
+        'book': borrow_request.book
+    })

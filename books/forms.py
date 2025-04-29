@@ -144,12 +144,21 @@ class BorrowRequestForm(forms.ModelForm):
                 raise forms.ValidationError("End date cannot be more than 6 months after the start date.")
             
 class BookReviewForm(forms.ModelForm):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+
+    rating = forms.ChoiceField(
+        choices=RATING_CHOICES,
+        widget=forms.RadioSelect,
+        label='Rate borrower (1‑5)'
+    )
+
     class Meta:
         model = BookReview
         fields = ['rating','comment']
         widgets = {
-            'comment': forms.TextInput(attrs={
+            'comment': forms.Textarea(attrs={
+                'maxlength': '500', 
                 'class': 'form-control',
                 'placeholder': 'Enter a review for this book:'
-            })
+            }),
         }
