@@ -19,11 +19,11 @@
           </p>
           <p><strong>Location:</strong> {{ book.location }}</p>
           <!-- Action button -->
-          <a href="{% url 'book_reviews_list' book.uuid %}" class="btn btn-primary btn-sm">View reviews</a>
-          <!-- Delete button -->
-          <a href="{% url 'delete_book' book.uuid %}" class="btn btn-danger btn-sm">Delete Book</a>
+          <a href="{% url 'book_reviews_list' book.uuid %}" class="btn btn-warning btn-sm">View reviews</a>
           <!-- Edit button -->
-          <a href="{% url 'edit_book'   book.uuid %}" class="btn btn-primary btn-sm me-2">Edit Book</a>         
+          <a href="{% url 'edit_book'   book.uuid %}" class="btn btn-primary btn-sm me-2">Edit Book</a>   
+          <!-- Delete button -->
+          <a href="{% url 'delete_book' book.uuid %}" class="btn btn-danger btn-sm">Delete Book</a>      
         </div>
       {% endfor %}
     </div>
