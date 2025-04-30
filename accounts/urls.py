@@ -37,6 +37,6 @@ urlpatterns = [
     path('approve-provider/<int:user_id>/', approve_provider_view, name='approve_provider'),
     path('borrow/', borrow_view, name='borrow_page'),
     path('my-books/', my_books_view, name='my_books'),
-    path('delete-book/<int:book_id>/', delete_book_view, name='delete_book'),
-    path('edit-book/<int:book_id>/', edit_book_view,   name='edit_book'),
+    path('delete-book/<uuid:book_uuid>/', delete_book_view, name='delete_book'),
+    path('edit-book/<uuid:book_uuid>/', edit_book_view, name='edit_book'),
 ]

@@ -172,27 +172,28 @@ def my_books_view(request):
     return render(request, 'books/my_books.html', {'books': books})
 
 @login_required
-def delete_book_view(request, book_id):
-    book = get_object_or_404(Book, id=book_id, user=request.user)
+def delete_book_view(request, book_uuid):
+    # only the owner should be able to delete
+    book = get_object_or_404(Book, uuid=book_uuid, user=request.user)
     
     if request.method == 'POST':
         book.delete()
         messages.success(request, "Book deleted successfully.")
-        return redirect('my_books')
+        return redirect('my_books')  # Assuming 'my_books' is the correct URL name for the user's books
 
     return render(request, 'books/confirm_delete.html', {'book': book})
 
 @login_required
-def edit_book_view(request, book_id):
+def edit_book_view(request, book_uuid):
     # only the owner should be able to edit
-    book = get_object_or_404(Book, id=book_id, user=request.user)
+    book = get_object_or_404(Book, uuid=book_uuid, user=request.user)
 
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             form.save()
             messages.success(request, "Book updated successfully.")
-            return redirect('my_books')
+            return redirect('my_books')  # Assuming 'my_books' is the correct URL name for the user's books
     else:
         form = BookForm(instance=book)
 
