@@ -282,11 +282,31 @@ def list_my_borrow_request_view(request):
         book_review__isnull=True
     ).order_by('-approved_at')
 
+    approved_requests = BorrowRequest.objects.all().filter(
+        status='approved',
+        requester=request.user,
+        book_review__isnull=True
+    ).order_by('-approved_at')
+
+    rejected_requests = BorrowRequest.objects.all().filter(
+        status='rejected',
+        requester=request.user,
+        book_review__isnull=True
+    ).order_by('-approved_at')
+
+    pending_requests = BorrowRequest.objects.all().filter(
+        status='pending',
+        requester=request.user,
+        book_review__isnull=True
+    ).order_by('-approved_at')
+
     return render(request, 'books/my_borrow_request_list.html', {
         
-        'borrow_requests': brs
-    ,
-        'returned_requests': returned_requests
+        'borrow_requests': brs,
+        'returned_requests': returned_requests,
+        'approved_requests': approved_requests,
+        'rejected_requests': rejected_requests,
+        'pending_requests': pending_requests
 })
 
 
