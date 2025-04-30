@@ -15,8 +15,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for req in borrow_requests %}
-        {% if req.status == 'pending' %}
+      {% for req in pending_requests %}
           <tr>
             <td>{{ req.book.title }}</td>
             <td>{{ req.book.user.username }}</td>
@@ -25,7 +24,6 @@
             <td>{{ req.end_date }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
-        {% endif %}
         {% empty %}
         <tr><td colspan="6" class="text-center">No pending requests.</td></tr>
       {% endfor %}
@@ -47,8 +45,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for req in borrow_requests %}
-        {% if req.status == 'approved' %}
+      {% for req in approved_requests %}
           <tr>
             <td>{{ req.book.title }}</td>
             <td>{{ req.book.user.username }}</td>
@@ -57,7 +54,6 @@
             <td>{{ req.end_date }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
-        {% endif %}
         {% empty %}
         <tr><td colspan="6" class="text-center">No approved requests.</td></tr>
       {% endfor %}
@@ -79,8 +75,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for req in borrow_requests %}
-        {% if req.status == 'rejected' %}
+      {% for req in rejected_requests %}
           <tr>
             <td>{{ req.book.title }}</td>
             <td>{{ req.book.user.username }}</td>
@@ -89,7 +84,6 @@
             <td>{{ req.end_date }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
-        {% endif %}
         {% empty %}
         <tr><td colspan="6" class="text-center">No declined requests.</td></tr>
       {% endfor %}
