@@ -292,19 +292,16 @@ def list_my_borrow_request_view(request):
     approved_requests = BorrowRequest.objects.all().filter(
         status='approved',
         requester=request.user,
-        book_review__isnull=True
     ).order_by('-approved_at')
 
     rejected_requests = BorrowRequest.objects.all().filter(
         status='rejected',
         requester=request.user,
-        book_review__isnull=True
     ).order_by('-approved_at')
 
     pending_requests = BorrowRequest.objects.all().filter(
         status='pending',
         requester=request.user,
-        book_review__isnull=True
     ).order_by('-approved_at')
 
     return render(request, 'books/my_borrow_request_list.html', {
@@ -320,7 +317,22 @@ def list_my_borrow_request_view(request):
 @login_required
 def list_borrow_request_view(request):
     borrow_requests = BorrowRequest.objects.all().order_by('-id')
-    return render(request, 'books/borrow_request_list.html', {'borrow_requests': borrow_requests})
+
+    pending_requests = BorrowRequest.objects.all().filter(
+        status='pending',
+        book__user=request.user,
+    ).order_by('-approved_at')
+
+    approved_requests = BorrowRequest.objects.all().filter(
+        status='approved',
+        book__user=request.user,
+    ).order_by('-approved_at')
+
+    return render(request, 'books/borrow_request_list.html', {
+        'borrow_requests': borrow_requests,
+        'pending_requests': pending_requests,
+        'approved_requests': approved_requests
+    })
 
 @login_required
 def list_my_collection_request_view(request):
