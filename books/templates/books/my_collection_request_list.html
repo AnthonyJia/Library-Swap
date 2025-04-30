@@ -12,14 +12,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for req in collection_requests %}
-        {% if req.status == 'pending' %}
+      {% for req in pending_requests %}
           <tr>
             <td>{{ req.collection.title }}</td>
             <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
-        {% endif %}
+          {% empty %}
+          <tr><td colspan="3" class="text-center">No pending requests.</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -36,14 +36,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for req in collection_requests %}
-        {% if req.status == 'approved' %}
+      {% for req in approved_requests %}
           <tr>
             <td>{{ req.collection.title }}</td>
             <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
-        {% endif %}
+          {% empty %}
+          <tr><td colspan="3" class="text-center">No approved requests.</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -60,14 +60,14 @@
       </tr>
     </thead>
     <tbody>
-      {% for req in collection_requests %}
-        {% if req.status == 'rejected' %}
+      {% for req in rejected_requests %}
           <tr>
             <td>{{ req.collection.title }}</td>
             <td>{{ req.collection.creator.username }}</td>
             <td>{{ req.get_status_display }}</td>
           </tr>
-        {% endif %}
+          {% empty %}
+          <tr><td colspan="3" class="text-center">No rejected requests.</td></tr>
       {% endfor %}
     </tbody>
   </table>
