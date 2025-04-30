@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
+from django.urls import reverse
 from .forms import BookForm, CollectionForm, BorrowRequestForm, BorrowerReviewForm, CollectionAccessRequestForm, BookReviewForm
 from .models import Book, Collection, BorrowRequest, BorrowerReview, CollectionAccessRequest
 import logging
@@ -461,9 +462,11 @@ def review_book_view(request, request_id):
     })
 
 def book_reviews_list(request, book_uuid):
+    prev = request.META.get('HTTP_REFERER', reverse('choose'))
     book = get_object_or_404(Book, uuid = book_uuid)
     reviews = BookReview.objects.filter(book=book).order_by('-created_at')
     return render(request, 'books/book_reviews_list.html', {
         'book': book,
-        'reviews': reviews
+        'reviews': reviews,
+        'prev_url': prev,
     })
