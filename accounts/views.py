@@ -142,8 +142,8 @@ def approve_provider_view(request, user_id):
     user_to_approve.provider_requested = False  # (Optional, if you were using this field)
     user_to_approve.save()
     messages.success(request, f"{user_to_approve.username} has been approved as a provider.")
-    return render(request, 'accounts/manage_provider_requests.html', {'pending_users': pending_users, 'query': query})
-
+    return redirect('manage_provider_requests')
+    
 def borrow_view(request):
     query = request.GET.get('q', '')
     if query:
