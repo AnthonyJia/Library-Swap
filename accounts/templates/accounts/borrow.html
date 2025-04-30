@@ -60,7 +60,6 @@
           {% if book.user != request.user %}
             <a href="{% url 'request_borrow_book' book.uuid %}"
               class="btn btn-primary {% if not book.is_available %}disabled{% endif %}"
-              target="_blank"
               rel="noopener noreferrer"
               >
               Request to Borrow
