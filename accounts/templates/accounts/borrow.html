@@ -41,7 +41,7 @@
           <p class="card-text book-meta mb-1">
             <strong>Average rating:</strong>
             {% if book.avg_rating %}
-              {{ book.avg_rating|floatformat:1 }}/5
+              {{ book.avg_rating|floatformat:1 }}
             {% else %}
               No reviews yet
             {% endif %}
