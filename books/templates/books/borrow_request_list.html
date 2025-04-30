@@ -19,8 +19,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for req in borrow_requests %}
-          {% if req.book.user == user and req.status == 'pending' %}
+        {% for req in pending_requests %}
             <tr>
               <td>{{ req.book.title }}</td>
               <td>{{ req.requester.username }}</td>
@@ -41,7 +40,8 @@
                 <a href="{% url 'handle_borrow_request' req.id 'decline' %}" class="btn btn-sm btn-danger">Decline</a>
               </td>
             </tr>
-          {% endif %}
+            {% empty %}
+            <tr><td colspan="9" class="text-center">No pending requests.</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -62,8 +62,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for req in borrow_requests %}
-          {% if req.book.user == user and req.status == 'approved' %}
+        {% for req in approved_requests %}
             <tr>
               <td>{{ req.book.title }}</td>
               <td>{{ req.requester.username }}</td>
@@ -75,7 +74,8 @@
                 <a href="{% url 'handle_borrow_request' req.id 'returned' %}" class="btn btn-sm btn-primary">Mark Returned</a>
               </td>
             </tr>
-          {% endif %}
+            {% empty %}
+            <tr><td colspan="9" class="text-center">No approved requests.</td></tr>
         {% endfor %}
       </tbody>
     </table>

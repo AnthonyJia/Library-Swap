@@ -293,19 +293,16 @@ def list_my_borrow_request_view(request):
     approved_requests = BorrowRequest.objects.all().filter(
         status='approved',
         requester=request.user,
-        book_review__isnull=True
     ).order_by('-approved_at')
 
     rejected_requests = BorrowRequest.objects.all().filter(
         status='rejected',
         requester=request.user,
-        book_review__isnull=True
     ).order_by('-approved_at')
 
     pending_requests = BorrowRequest.objects.all().filter(
         status='pending',
         requester=request.user,
-        book_review__isnull=True
     ).order_by('-approved_at')
 
     return render(request, 'books/my_borrow_request_list.html', {
@@ -321,18 +318,63 @@ def list_my_borrow_request_view(request):
 @login_required
 def list_borrow_request_view(request):
     borrow_requests = BorrowRequest.objects.all().order_by('-id')
-    return render(request, 'books/borrow_request_list.html', {'borrow_requests': borrow_requests})
+
+    pending_requests = BorrowRequest.objects.all().filter(
+        status='pending',
+        book__user=request.user,
+    ).order_by('-approved_at')
+
+    approved_requests = BorrowRequest.objects.all().filter(
+        status='approved',
+        book__user=request.user,
+    ).order_by('-approved_at')
+
+    return render(request, 'books/borrow_request_list.html', {
+        'borrow_requests': borrow_requests,
+        'pending_requests': pending_requests,
+        'approved_requests': approved_requests
+    })
 
 @login_required
 def list_my_collection_request_view(request):
     collection_requests = CollectionAccessRequest.objects.filter(requester = request.user).order_by('-id')
-    return render(request, 'books/my_collection_request_list.html', {'collection_requests': collection_requests})
+
+    pending_requests = CollectionAccessRequest.objects.all().filter(
+        status='pending',
+        requester=request.user,
+    ).order_by('-id')
+
+    approved_requests = CollectionAccessRequest.objects.all().filter(
+        status='approved',
+        requester=request.user,
+    ).order_by('-id')
+
+    rejected_requests = CollectionAccessRequest.objects.all().filter(
+        status='rejected',
+        requester=request.user,
+    ).order_by('-id')
+
+    return render(request, 'books/my_collection_request_list.html', {
+        'collection_requests': collection_requests,
+        'pending_requests': pending_requests,
+        'approved_requests': approved_requests,
+        'rejected_requests': rejected_requests
+    })
 
 
 @login_required
 def list_collection_request_view(request):
     collection_requests = CollectionAccessRequest.objects.all().order_by('-id')
-    return render(request, 'books/collection_request_list.html', {'collection_requests': collection_requests})
+
+    pending_requests = CollectionAccessRequest.objects.all().filter(
+        status='pending',
+        collection__creator=request.user,
+    ).order_by('-id')
+
+    return render(request, 'books/collection_request_list.html', {
+        'collection_requests': collection_requests,
+        'pending_requests': pending_requests
+    })
 
 @login_required
 def handle_borrow_request_view(request, request_id, action):
