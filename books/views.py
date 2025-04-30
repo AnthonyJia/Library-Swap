@@ -222,10 +222,10 @@ def request_borrow_book(request, book_uuid):
 
     private_collections = book.collection_set.filter(visibility='private')
 
-    accessible = private_collections.filter(allowed_users=request.user).exists() or book.collection_set.filter(visibility='public').exists()
-    if not accessible:
-        messages.error(request, "You do not have access to this private collection.")
-        return redirect('borrow_page')
+    if private_collections.exists():
+        if not private_collections.filter(allowed_users=request.user).exists():
+            messages.error(request, "You do not have access to borrow this book-it's in a private collection.")
+            return redirect('borrow_page')
 
     if book.current_borrower:
         messages.error(request, f"'{book.title}' is already borrowed.")
