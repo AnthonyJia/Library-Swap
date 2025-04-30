@@ -39,7 +39,7 @@
           <p class="card-text book-meta mb-1"><strong>Description:</strong> {{ book.description|truncatewords:20 }}</p>
           <p class="card-text book-meta mb-1"><strong>Uploaded&nbsp;by:</strong> {{ book.user.username }} {% if user.is_authenticated %} ({{book.uploader_email}}) {% endif %}</p>
           <p class="card-text book-meta mb-1">
-            <strong>Average rating::</strong>
+            <strong>Average rating:</strong>
             {% if book.avg_rating %}
               {{ book.avg_rating|floatformat:1 }}/5
             {% else %}
