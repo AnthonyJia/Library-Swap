@@ -128,7 +128,7 @@ def manage_provider_requests_view(request):
             Q(username__icontains=query) | Q(email__icontains=query)
         )
 
-    return render(request, 'your_template.html', {'pending_users': pending_users, 'query': query})
+    return render(request, 'accounts/manage_provider_requests.html', {'pending_users': pending_users, 'query': query})
 
 @login_required
 def approve_provider_view(request, user_id):
@@ -142,7 +142,7 @@ def approve_provider_view(request, user_id):
     user_to_approve.provider_requested = False  # (Optional, if you were using this field)
     user_to_approve.save()
     messages.success(request, f"{user_to_approve.username} has been approved as a provider.")
-    return redirect('manage_provider_requests')
+    return render(request, 'accounts/manage_provider_requests.html', {'pending_users': pending_users, 'query': query})
 
 def borrow_view(request):
     query = request.GET.get('q', '')
