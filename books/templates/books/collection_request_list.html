@@ -16,9 +16,8 @@
         </tr>
       </thead>
       <tbody>
-        {% for req in collection_requests %}
-          {% if req.collection.creator == user and req.status == 'pending' %}
-            <tr>
+        {% for req in pending_requests %}
+=            <tr>
               <td>{{ req.collection.title }}</td>
               <td>{{ req.requester.username }}</td>
               <td>{{ req.message }}</td>
@@ -35,7 +34,8 @@
                 <a href="{% url 'handle_collection_access_request' req.id 'decline' %}" class="btn btn-sm btn-danger">Decline</a>
               </td>
             </tr>
-          {% endif %}
+            {% empty %}
+            <tr><td colspan="6" class="text-center">No pending requests.</td></tr>
         {% endfor %}
       </tbody>
     </table>

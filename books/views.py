@@ -337,13 +337,33 @@ def list_borrow_request_view(request):
 @login_required
 def list_my_collection_request_view(request):
     collection_requests = CollectionAccessRequest.objects.filter(requester = request.user).order_by('-id')
+
+    pending_requests = BorrowRequest.objects.all().filter(
+        status='pending',
+        book__user=request.user,
+    ).order_by('-approved_at')
+
+    approved_requests = BorrowRequest.objects.all().filter(
+        status='approved',
+        book__user=request.user,
+    ).order_by('-approved_at')
+
     return render(request, 'books/my_collection_request_list.html', {'collection_requests': collection_requests})
 
 
 @login_required
 def list_collection_request_view(request):
     collection_requests = CollectionAccessRequest.objects.all().order_by('-id')
-    return render(request, 'books/collection_request_list.html', {'collection_requests': collection_requests})
+
+    pending_requests = CollectionAccessRequest.objects.all().filter(
+        status='pending',
+        collection__creator=request.user,
+    ).order_by('-id')
+
+    return render(request, 'books/collection_request_list.html', {
+        'collection_requests': collection_requests,
+        'pending_requests': pending_requests
+    })
 
 @login_required
 def handle_borrow_request_view(request, request_id, action):
