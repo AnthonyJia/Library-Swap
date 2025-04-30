@@ -294,7 +294,7 @@ def list_my_borrow_request_view(request):
         book_review__isnull=True
     ).order_by('-approved_at')
 
-    pending_requests =     approved_requests = BorrowRequest.objects.all().filter(
+    pending_requests = BorrowRequest.objects.all().filter(
         status='pending',
         requester=request.user,
         book_review__isnull=True
