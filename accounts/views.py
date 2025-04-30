@@ -116,22 +116,19 @@ def request_provider_view(request):
 
 @login_required
 def manage_provider_requests_view(request):
-    if not request.user.is_provider_approved:
+    if not request.user.is_provider_approved and not request.user.is_superuser:
         messages.error(request, "Access denied.")
         return redirect('choose')
 
     query = request.GET.get('q', '')
-    pending_users = CustomUser.objects.filter(is_provider_approved=False)
+    pending_users = CustomUser.objects.filter(is_provider_approved=False).exclude(is_superuser=True)
 
     if query:
         pending_users = pending_users.filter(
             Q(username__icontains=query) | Q(email__icontains=query)
         )
 
-    return render(request, 'accounts/manage_provider_requests.html', {
-        'pending_users': pending_users,
-        'query': query
-    })
+    return render(request, 'your_template.html', {'pending_users': pending_users, 'query': query})
 
 @login_required
 def approve_provider_view(request, user_id):
