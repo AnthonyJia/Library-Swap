@@ -1,16 +1,20 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/hLqvXyMi)
+# Library Swap (Library Management Web Application)
 
-Link: https://projectb18-63ef789a48c4.herokuapp.com/
+## Project Overview
+This is a full-stack web application designed to help librarians manage book lending and patrons to borrow and return books efficiently. This was developed as part of a university course project.
 
+## My Role & Contributions  
+**Full-Stack Developer**
 
+- Developed backend APIs using **Django** for book lending, user authentication, and transaction management.  
+- Integrated **Google OAuth 2.0** for secure login and user management.  
+- Implemented frontend interfaces with Django templates, HTML, CSS, and JavaScript for a responsive user experience.  
+- Configured **PostgreSQL** database for persistent and scalable data storage.  
+- Integrated **AWS S3** for cloud storage of book cover images and media files.  
+- Collaborated via **Git/GitHub** with teammates, participated in code reviews and agile workflows.
 
-RESOURCES USED / CITATIONS:
-
-Front-end Styling
-Bootswatch Superhero (v5.3.0) — a free Bootstrap 5 theme (MIT License)
-Source: https://bootswatch.com/superhero/
-CDN: https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/superhero/bootstrap.min.css
-
-Learning resource: [https://www.geeksforgeeks.org/](https://www.geeksforgeeks.org/front-end-development/)
-
+## Deployment  
+The app is deployed on **Heroku** and accessible here:  
+[Library Swap](https://projectb18-63ef789a48c4.herokuapp.com/)  
+*Deployment and setup were managed by a team member.*
 
